@@ -1,5 +1,1 @@
-local function OnConsoleCustomHud()
-    local screen = GetGUIManager():CreateGUIScript("GUIMenuCustomizeHudScreen")
-end
-
-Event.Hook("Console_customhud", OnConsoleCustomHud)
+Event.Hook("Console_customhud", function() PlayerUI_SetBetterUIEnabled() end)

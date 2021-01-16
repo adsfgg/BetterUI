@@ -1,5 +1,3 @@
-Script.Load("lua/BetterUI/GUI/GUIMenuCustomizeHudScreen.lua")
-
 table.insert(gModsCategories, {
     categoryName = "BetterUI",
     entryConfig = {
@@ -27,9 +25,8 @@ table.insert(gModsCategories, {
                                 if MainMenu and MainMenu.Close then
                                     MainMenu:Close()
                                 end
-    
-                                print("Showing better ui settings")
-                                local screen = GetGUIManager():CreateGUIScript("GUIMenuCustomizeHudScreen")
+
+                                PlayerUI_SetBetterUIEnabled()
                             else
                                 MainMenu:DisplayPopupMessage("This option can only be used in game", "Better UI") 
                             end

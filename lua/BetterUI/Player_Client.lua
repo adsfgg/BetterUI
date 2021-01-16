@@ -1,16 +1,74 @@
 local betterUIEnabled = false
-local kBetterUIPercentSpoof = 0.65
+local betterUIPercentSpoof = 0.65
+local hudScripts = {
+    [kTeam1Index] = "Hud/Marine/GUIMarineHUD",
+    [kTeam2Index] = "GUIAlienHUD"
+}
+
+local betterUIInventory = {
+    [kTeam1Index] = {
+        {
+            TechId = kTechId.Rifle,
+            HUDSlot = 1,
+        },
+        {
+            TechId = kTechId.Pistol,
+            HUDSlot = 2,
+        },
+        {
+            TechId = kTechId.Axe,
+            HUDSlot = 3,
+        },
+        {
+            TechId = kTechId.LayMines,
+            HUDSlot = 4,
+        },
+        {
+            TechId = kTechId.ClusterGrenade,
+            HUDSlot = 5,
+        }
+    },
+    [kTeam2Index] = {
+        {
+            TechId = kTechId.Spray,
+            HUDSlot = 1
+        },
+        {
+            TechId = kTechId.BuildAbility,
+            HUDSlot = 2
+        },
+        {
+            TechId = kTechId.BileBomb,
+            HUDSlot = 3
+        },
+        {
+            TechId = kTechId.BabblerAbility,
+            HUDSlot = 4
+        },
+        nil
+    }
+}
+local betterUIActiveWeapon = {
+    [kTeam1Index] = kTechId.Rifle,
+    [kTeam2Index] = kTechId.Bite
+}
 
 function PlayerUI_SetBetterUIEnabled()
     betterUIEnabled = true
+    MouseTracker_SetIsVisible(true, "ui/Cursor_MenuDefault.dds", true)
 end
 
 function PlayerUI_SetBetterUIDisabled()
     betterUIEnabled = false
+    MouseTracker_SetIsVisible(false)
 end
 
 function PlayerUI_GetBetterUIEnabled()
     return betterUIEnabled
+end
+
+function PlayerUI_GetBetterUISpoofPercentage()
+    return betterUIPercentSpoof
 end
 
 -- We want to spoof some values when BetterUI modification is enabled
@@ -19,7 +77,7 @@ function PlayerUI_GetPlayerHealth()
     local player = Client.GetLocalPlayer()
     if player then
         if betterUIEnabled then
-            return player:GetMaxHealth() * kBetterUIPercentSpoof
+            return player:GetMaxHealth() * betterUIPercentSpoof
         end
 
         local health = math.ceil(player:GetHealth())
@@ -36,88 +94,64 @@ end
 function PlayerUI_GetPlayerArmor()
     local player = Client.GetLocalPlayer()
     if player then
-        return betterUIEnabled and player:GetArmor() * kBetterUIPercentSpoof or player:GetArmor()
+        return betterUIEnabled and player:GetArmor() * betterUIPercentSpoof or player:GetArmor()
     end
 
     return 0
 end
 
+local oldGetPlayerParasiteState = PlayerUI_GetPlayerParasiteState
 function PlayerUI_GetPlayerParasiteState()
-    local playerParasiteState = 1
-    if PlayerUI_GetPlayerIsParasited() then
-        playerParasiteState = 2
-    end
-
     if betterUIEnabled then
-        playerParasiteState = 2
+        return 2
     end
 
-    return playerParasiteState
+    return oldGetPlayerParasiteState()
 end
 
+local oldGetPlayerParasiteState = PlayerUI_GetPlayerParasiteState
 function PlayerUI_GetPlayerParasiteTimeRemaining()
-    local player = Client.GetLocalPlayer()
-    if player and HasMixin(player, "ParasiteAble") then
-        if betterUIEnabled then
-            return kBetterUIPercentSpoof
-        end
-
-        return player:GetParasitePercentageRemaining()
+    if betterUIEnabled then
+        return betterUIPercentSpoof
     end
 
-    return false
+    return oldGetPlayerParasiteState()
 end
 
+local oldGetPlayerNanoshieldState = PlayerUI_GetPlayerNanoShieldState
 function PlayerUI_GetPlayerNanoShieldState()
-    local playerNanoshieldState = 1
-    if PlayerUI_GetIsNanoShielded() then
-        playerNanoshieldState = 2
-    end
-
     if betterUIEnabled then
-        playerNanoshieldState = 2
+        return 2
     end
 
-    return playerNanoshieldState
+    return oldGetPlayerNanoshieldState()
 end
 
+local oldGetNanoShieldTimeRemaining = PlayerUI_GetNanoShieldTimeRemaining
 function PlayerUI_GetNanoShieldTimeRemaining()
-    local player = Client.GetLocalPlayer()
-    if player and HasMixin(player, "NanoShieldAble") then
-        if betterUIEnabled then
-            return kBetterUIPercentSpoof
-        end
-
-        return player:GetNanoShieldTimeRemaining()
-    end
-
-    return false
-end
-
-function PlayerUI_GetPlayerCatPackState()
-    local playerCatPackState = 1
-    if PlayerUI_GetIsCatPacked() then
-        playerCatPackState = 2
-    end
-
     if betterUIEnabled then
-        playerCatPackState = 2
+        return betterUIPercentSpoof
     end
 
-    return playerCatPackState
+    return oldGetNanoShieldTimeRemaining()
 end
 
-function PlayerUI_GetCatPackTimeRemaining()
-    local player = Client.GetLocalPlayer()
-    if player and HasMixin(player, "CatPack") then
-        if betterUIEnabled then
-            return kBetterUIPercentSpoof
-        end
-
-        return player:GetCatPackTimeRemaining()
+local oldGetPlayerCatPackState = PlayerUI_GetPlayerCatPackState
+function PlayerUI_GetPlayerCatPackState()
+    if betterUIEnabled then
+        return 2
     end
 
-    return false
+    return oldGetPlayerCatPackState()
+end
+
+local oldGetCatPackTimeRemaining = PlayerUI_GetCatPackTimeRemaining
+function PlayerUI_GetCatPackTimeRemaining()
+    if betterUIEnabled then
+        return betterUIPercentSpoof
+    end
+
+    return oldGetCatPackTimeRemaining()
 end
 
 function PlayerUI_GetIsCorroded()
@@ -133,34 +167,148 @@ function PlayerUI_GetIsCorroded()
     return false
 end
 
-function PlayerUI_GetTeamResources()
-    PROFILE("PlayerUI_GetTeamResources")
+function PlayerUI_GetInventoryTechIds()
+    PROFILE("PlayerUI_GetInventoryTechIds")
+
+    local player = Client.GetLocalPlayer()
+    if player and HasMixin(player, "WeaponOwner") then
+        if betterUIEnabled then
+            return betterUIInventory[player:GetTeamNumber()]
+        end
+
+        local inventoryTechIds = table.array(5)
+        local weaponList = player:GetHUDOrderedWeaponList()
+
+        for w = 1, #weaponList do
+            local weapon = weaponList[w]
+            table.insert(inventoryTechIds, { TechId = weapon:GetTechId(), HUDSlot = weapon:GetHUDSlot() })
+        end
+
+        return inventoryTechIds
+    end
+    return { }
+end
+
+function PlayerUI_GetActiveWeaponTechId()
+    PROFILE("PlayerUI_GetActiveWeaponTechId")
 
     local player = Client.GetLocalPlayer()
     if player then
         if betterUIEnabled then
-            return 45
+            return betterUIActiveWeapon[player:GetTeamNumber()]
         end
 
-        return player:GetDisplayTeamResources()
+        local activeWeapon = player:GetActiveWeapon()
+        if activeWeapon then
+            return activeWeapon:GetTechId()
+        end
     end
-
-    return 0
 end
 
-function PlayerUI_GetPlayerResources()
+local oldGetCommanderName = PlayerUI_GetCommanderName
+function PlayerUI_GetCommanderName()
     if betterUIEnabled then
-        return 15
+        return "asdfg"
+    end
+    
+    return oldGetCommanderName()
+end
+
+local oldGetArmorLevel = PlayerUI_GetArmorLevel
+function PlayerUI_GetArmorLevel(researched)
+    if betterUIEnabled then
+        return 1
     end
 
-    if GetWarmupActive() then
-        return 100
+    return oldGetArmorLevel(researched)
+end
+
+local oldGetWeaponLevel = PlayerUI_GetWeaponLevel
+function PlayerUI_GetWeaponLevel(researched)
+    if betterUIEnabled then
+        return 1
     end
 
-    local player = Client.GetLocalPlayer()
-    if player then
-        return player:GetDisplayResources()
+    return oldGetWeaponLevel(researched)
+end
+
+local oldGetIsNanoShielded = PlayerUI_GetIsNanoShielded
+function PlayerUI_GetIsNanoShielded()
+    if betterUIEnabled then
+        return true
     end
 
-    return 0
+    return oldGetIsNanoShielded()
+end
+
+local oldGetIsDetected = PlayerUI_GetIsDetected
+function PlayerUI_GetIsDetected()
+    if betterUIEnabled then
+        return true
+    end
+
+    return oldGetIsDetected()
+end
+
+local oldGetIsEnzymed = PlayerUI_GetIsEnzymed
+function PlayerUI_GetIsEnzymed()
+    if betterUIEnabled then
+        return true
+    end
+
+    return oldGetIsEnzymed()
+end
+
+local oldGetIsCloaked = PlayerUI_GetIsCloaked
+function PlayerUI_GetIsCloaked()
+    if betterUIEnabled then
+        return true
+    end
+
+    return oldGetIsCloaked()
+end
+
+local oldGetHasUmbra = PlayerUI_GetHasUmbra
+function PlayerUI_GetHasUmbra()
+    if betterUIEnabled then
+        return true
+    end
+
+    return oldGetHasUmbra()
+end
+
+local oldGetEnergizeLevel = PlayerUI_GetEnergizeLevel
+function PlayerUI_GetEnergizeLevel()
+    if betterUIEnabled then
+        return true
+    end
+
+    return oldGetEnergizeLevel()
+end
+
+local oldWithinCragRange = PlayerUI_WithinCragRange
+function PlayerUI_WithinCragRange()
+    if betterUIEnabled then
+        return true
+    end
+
+    return oldWithinCragRange()
+end
+
+local oldGetNumClingedBabblers = PlayerUI_GetNumClingedBabblers
+function PlayerUI_GetNumClingedBabblers()
+    if betterUIEnabled then
+        return 3
+    end
+
+    return oldGetNumClingedBabblers()
+end
+
+local oldGetNumBabblers = PlayerUI_GetNumBabblers
+function PlayerUI_GetNumBabblers()
+    if betterUIEnabled then
+        return 5
+    end
+
+    return oldGetNumBabblers()
 end
