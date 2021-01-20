@@ -55,12 +55,10 @@ local betterUIActiveWeapon = {
 
 function PlayerUI_SetBetterUIEnabled()
     betterUIEnabled = true
-    MouseTracker_SetIsVisible(true, "ui/Cursor_MenuDefault.dds", true)
 end
 
 function PlayerUI_SetBetterUIDisabled()
     betterUIEnabled = false
-    MouseTracker_SetIsVisible(false)
 end
 
 function PlayerUI_GetBetterUIEnabled()
@@ -109,13 +107,13 @@ function PlayerUI_GetPlayerParasiteState()
     return oldGetPlayerParasiteState()
 end
 
-local oldGetPlayerParasiteState = PlayerUI_GetPlayerParasiteState
+local oldGetPlayerParasiteTimeRemaining = PlayerUI_GetPlayerParasiteTimeRemaining
 function PlayerUI_GetPlayerParasiteTimeRemaining()
     if betterUIEnabled then
         return betterUIPercentSpoof
     end
 
-    return oldGetPlayerParasiteState()
+    return oldGetPlayerParasiteTimeRemaining()
 end
 
 local oldGetPlayerNanoshieldState = PlayerUI_GetPlayerNanoShieldState
@@ -217,7 +215,7 @@ end
 local oldGetArmorLevel = PlayerUI_GetArmorLevel
 function PlayerUI_GetArmorLevel(researched)
     if betterUIEnabled then
-        return 1
+        return 3
     end
 
     return oldGetArmorLevel(researched)
@@ -226,7 +224,7 @@ end
 local oldGetWeaponLevel = PlayerUI_GetWeaponLevel
 function PlayerUI_GetWeaponLevel(researched)
     if betterUIEnabled then
-        return 1
+        return 3
     end
 
     return oldGetWeaponLevel(researched)

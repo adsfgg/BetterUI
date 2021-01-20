@@ -1,23 +1,29 @@
-local startMouseX = 0
-local startMouseY = 0
-local startPos = nil
+Script.Load("lua/GUIAnimatedScript.lua")
 
-local uiElementsToMove
+class 'GUICustomizeHUD' (GUIAnimatedScript)
 
-local oldInit = GUIMarineHUD.Initialize
-function GUIMarineHUD:Initialize()
-    oldInit(self)
+local hudScripts = {
+    [kTeam1Index] = "Hud/Marine/GUIMarineHUD",
+    [kTeam2Index] = "GUIAlienHUD"
+}
+local hudScript
 
-    uiElementsToMove = {
-        {Element = self.statusDisplays.statusBackground},
-        {Element = self.nanoshieldText, NoScale = true},
-        {Element = self.commanderName},
-        {Element = self.locationText},
-        {Element = self.armorLevel, NoScale = true},
-        {Element = self.weaponLevel, NoScale = true},
-        {Element = self.statusDisplay.statusbackground},
-        {Element = self.gameTime},
-    }
+function GUICustomizeHUD:Initialize()
+    GUIAnimatedScript.Initialize(self)
+    PlayerUI_SetBetterUIEnabled()
+    MouseTracker_SetIsVisible(true, "ui/Cursor_MenuDefault.dds", true)
+
+    local player = Client.GetLocalPlayer()
+    if player and player.GetTeamNumber then
+        hudScript = ClientUI.GetScript(hudScripts[player:GetTeamNumber()])
+    end
+    hudScript.commanderNameCount = 0
+end
+
+function GUICustomizeHUD:Uninitialize()
+    GUIAnimatedScript.Uninitialize(self)
+    PlayerUI_SetBetterUIDisabled()
+    MouseTracker_SetIsVisible(false)
 end
 
 local function ProcessMove(self, mouseX, mouseY, scale)
@@ -28,17 +34,11 @@ local function ProcessMove(self, mouseX, mouseY, scale)
     self.Element:SetPosition(newPos)
 end
 
-local oldOnUpdate = GUIMarineHUD.Update
-function GUIMarineHUD:Update(deltaTime)
-    oldOnUpdate(self, deltaTime)
-
-    if not PlayerUI_GetBetterUIEnabled() then
-        return
-    end
-
+function GUICustomizeHUD:Update(deltaTime)
     local mouseX, mouseY = Client.GetCursorPosScreen()
     local screenWidth = Client.GetScreenWidth()
     local screenHeight = Client.GetScreenHeight()
+    local uiElementsToMove = hudScript:GetElementsToMove()
 
     -- Process clicks
     if self.mouseDown then
@@ -52,6 +52,9 @@ function GUIMarineHUD:Update(deltaTime)
         for _, element in ipairs(uiElementsToMove) do
             local pos = element.Element:GetScreenPosition(screenWidth, screenHeight)
             local size = element.Element:GetSize()
+            if size.x == 1 and size.y == 1 then
+                print("WARNING: GetSize() == (1,1) for " .. element.Name)
+            end
 
             if mouseX >= pos.x and mouseX <= pos.x + size.x and mouseY >= pos.y and mouseY <= pos.y + size.y then
                 self.hoverElement = element
@@ -61,9 +64,8 @@ function GUIMarineHUD:Update(deltaTime)
     end
 end
 
-function GUIMarineHUD:SendKeyEvent(key, down)
-    if not PlayerUI_GetBetterUIEnabled() then return false end
-
+function GUICustomizeHUD:SendKeyEvent(key, down)
+    -- Handle left clicks on an element
     if key == InputKey.MouseButton0 and self.hoverElement then
         if self.mouseDown ~= down then
             if down then
@@ -76,8 +78,20 @@ function GUIMarineHUD:SendKeyEvent(key, down)
         self.mouseDown = down
     end
 
+    -- Handle right clicks not on element
+    if key == InputKey.MouseButton1 then
+        if self.rightMouseDown ~= down and down and not self.hoverElement then
+            local x, y = Client.GetCursorPosScreen()
+            local commName = GUIMarineCommanderName()
+            commName:Initialize( hudScript, hudScript.background, Vector(x / self.scale, y / self.scale, 0) )
+            hudScript:AddElement( "commanderName" .. hudScript.commanderNameCount, commName)
+            hudScript.commanderNameCount = hudScript.commanderNameCount + 1
+        end
+        self.rightMouseDown = down
+    end
+
     if key == InputKey.Escape and not down then
-        PlayerUI_SetBetterUIDisabled()
+        GetGUIManager():DestroyGUIScript(self)
         return false
     end
 
