@@ -37,9 +37,6 @@ function GUIMarineLocationText:Update(deltaTime)
     end
 end
 
-function GUIMarineLocationText:Uninitialize()
-end
-
 function GUIMarineLocationText:GetElementToMove()
     return self.locationText
 end

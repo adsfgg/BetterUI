@@ -17,7 +17,9 @@ function GUICustomizeHUD:Initialize()
     if player and player.GetTeamNumber then
         hudScript = ClientUI.GetScript(hudScripts[player:GetTeamNumber()])
     end
-    hudScript.commanderNameCount = 0
+    if not hudScript.commanderNameCount then
+        hudScript.commanderNameCount = 0
+    end
 end
 
 function GUICustomizeHUD:Uninitialize()
@@ -80,12 +82,16 @@ function GUICustomizeHUD:SendKeyEvent(key, down)
 
     -- Handle right clicks not on element
     if key == InputKey.MouseButton1 then
-        if self.rightMouseDown ~= down and down and not self.hoverElement then
+        if self.rightMouseDown ~= down and down then
             local x, y = Client.GetCursorPosScreen()
-            local commName = GUIMarineCommanderName()
-            commName:Initialize( hudScript, hudScript.background, Vector(x / self.scale, y / self.scale, 0) )
-            hudScript:AddElement( "commanderName" .. hudScript.commanderNameCount, commName)
-            hudScript.commanderNameCount = hudScript.commanderNameCount + 1
+            if self.hoverElement then
+                hudScript:RemoveElement(self.hoverElement.Name)
+            else
+                local commName = GUIMarineCommanderName()
+                commName:Initialize( hudScript, hudScript.background, Vector(x / self.scale, y / self.scale, 0) )
+                hudScript:AddElement( "commanderName" .. hudScript.commanderNameCount, commName)
+                hudScript.commanderNameCount = hudScript.commanderNameCount + 1
+            end
         end
         self.rightMouseDown = down
     end

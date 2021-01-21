@@ -23,7 +23,9 @@ end
 
 function GUIMarineCommanderName:Reset(scale)
     self.commanderName:SetUniformScale(scale)
+    self.commanderName:SetScale(GetScaledVector())
     self.commanderName:SetPosition( self.position )
+    self.commanderName:SetFontName(GUIMarineCommanderName.kFontName)
     GUIMakeFontScale(self.commanderName)
     self.commanderName:SetIsVisible(true)
 end
@@ -57,9 +59,6 @@ function GUIMarineCommanderName:Update(deltaTime)
         self.commanderName:SetText("")
         self.commanderName:SetText(commanderName, 0.5, "COMM_TEXT_WRITE")
     end
-end
-
-function GUIMarineCommanderName:Uninitialize()
 end
 
 function GUIMarineCommanderName:GetElementToMove()

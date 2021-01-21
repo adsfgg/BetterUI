@@ -71,10 +71,11 @@ function GUIPlayerHUD:GetElement(name)
 end
 
 function GUIPlayerHUD:RemoveElement(name)
-    local ele = self.hudElements[name]
-
-    assert(ele, string.format("Cannot remove element with name %s; element does not exist", name))
-    return ele
+    assert(self.hudElements[name], string.format("Cannot remove element with name %s; element does not exist", name))
+    -- self.hudElements[name].Element:SetIsVisible(false)
+    self.hudElements[name].Element:Uninitialize()
+    self.hudElements[name] = nil
+    -- self:Reset()
 end
 
 function GUIPlayerHUD:ClearElements()

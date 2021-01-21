@@ -19,12 +19,13 @@ function GUIPlayerHUDElement:Update(deltaTime)
 end
 
 function GUIPlayerHUDElement:Uninitialize()
-    assert(false)
+    if self:GetElementToMove() then
+        self:GetElementToMove():Destroy()
+    end
 end
 
-function GUIPlayerHUDElement:CreateBackground()
-    self.background = self.parentScript:CreateAnimatedGraphicItem()
-    self.background:AddAsChildTo(self.frame)
+function GUIPlayerHUD:GetElementToMove()
+    assert(false)
 end
 
 function AnimFadeIn(scriptHandle, itemHandle)

@@ -54,9 +54,6 @@ function GUIMarineWeaponLevelIcon:Update(deltaTime)
     self.weaponLevel:SetColor(color)
 end
 
-function GUIMarineWeaponLevelIcon:Uninitialize()
-end
-
 function GUIMarineWeaponLevelIcon:GetElementToMove()
     return self.weaponLevel
 end

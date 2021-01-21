@@ -73,9 +73,6 @@ function GUIMarinePowerIcon:Update(deltaTime)
     end
 end
 
-function GUIMarinePowerIcon:Uninitialize()
-end
-
 function GUIMarinePowerIcon:GetElementToMove()
     return self.powerIcon
 end

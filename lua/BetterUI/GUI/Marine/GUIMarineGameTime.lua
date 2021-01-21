@@ -19,16 +19,15 @@ end
 
 function GUIMarineGameTime:Reset(scale)
     self.gameTime:SetUniformScale(scale)
+    self.gameTime:SetScale(GetScaledVector())
     self.gameTime:SetPosition(self.position)
+    self.gameTime:SetFontName(GUIMarineGameTime.kFontName)
     GUIMakeFontScale(self.gameTime)
     self.gameTime:SetIsVisible(true)
 end
 
 function GUIMarineGameTime:Update(deltaTime)
     self.gameTime:SetText(PlayerUI_GetGameTimeString())
-end
-
-function GUIMarineGameTime:Uninitialize()
 end
 
 function GUIMarineGameTime:GetElementToMove()

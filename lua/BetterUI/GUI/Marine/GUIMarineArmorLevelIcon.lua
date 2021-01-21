@@ -54,9 +54,6 @@ function GUIMarineArmorLevelIcon:Update(deltaTime)
     self.armorLevel:SetColor(color)
 end
 
-function GUIMarineArmorLevelIcon:Uninitialize()
-end
-
 function GUIMarineArmorLevelIcon:GetElementToMove()
     return self.armorLevel
 end
