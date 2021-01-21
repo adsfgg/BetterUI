@@ -7,44 +7,17 @@ local hudScripts = {
 
 local betterUIInventory = {
     [kTeam1Index] = {
-        {
-            TechId = kTechId.Rifle,
-            HUDSlot = 1,
-        },
-        {
-            TechId = kTechId.Pistol,
-            HUDSlot = 2,
-        },
-        {
-            TechId = kTechId.Axe,
-            HUDSlot = 3,
-        },
-        {
-            TechId = kTechId.LayMines,
-            HUDSlot = 4,
-        },
-        {
-            TechId = kTechId.ClusterGrenade,
-            HUDSlot = 5,
-        }
+        { TechId = kTechId.Rifle, HUDSlot = 1 },
+        { TechId = kTechId.Pistol, HUDSlot = 2 },
+        { TechId = kTechId.Axe, HUDSlot = 3 },
+        { TechId = kTechId.LayMines, HUDSlot = 4 },
+        { TechId = kTechId.ClusterGrenade, HUDSlot = 5 }
     },
     [kTeam2Index] = {
-        {
-            TechId = kTechId.Spray,
-            HUDSlot = 1
-        },
-        {
-            TechId = kTechId.BuildAbility,
-            HUDSlot = 2
-        },
-        {
-            TechId = kTechId.BileBomb,
-            HUDSlot = 3
-        },
-        {
-            TechId = kTechId.BabblerAbility,
-            HUDSlot = 4
-        },
+        { TechId = kTechId.Spray, HUDSlot = 1 },
+        { TechId = kTechId.BuildAbility, HUDSlot = 2 },
+        { TechId = kTechId.BileBomb, HUDSlot = 3 },
+        { TechId = kTechId.BabblerAbility, HUDSlot = 4 },
         nil
     }
 }

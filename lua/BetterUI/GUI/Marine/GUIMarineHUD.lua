@@ -1,22 +1,3 @@
--- function GUIMarineHUD:GetElements()
---     local elements = { 
---         {Name = "statusDisplays", Element = self.statusDisplays.statusBackground},
---         {Name = "nanoshieldText", Element = self.nanoshieldText, NoScale = true},
---         {Name = "commanderName", Element = self.commanderName},
---         {Name = "locationText", Element = self.locationText},
---         {Name = "armorLevel", Element = self.armorLevel, NoScale = true},
---         {Name = "weaponLevel", Element = self.weaponLevel, NoScale = true},
---         {Name = "statusDisplay", Element = self.statusDisplay.statusbackground},
---         {Name = "gameTime", Element = self.gameTime},
---     }
-
---     for i,v in ipairs(self.inventoryDisplay.inventoryIcons) do
---         table.insert(elements, {Name = "inventoryIcons[" .. i .. "]", Element = v.Graphic})
---     end
-
---     return elements
--- end
-
 Script.Load("lua/BetterUI/GUI/GUIPlayerHUD.lua")
 
 -- GUI Elements
@@ -41,60 +22,12 @@ function GUIMarineHUD:Initialize()
 
     -- Setup the default Marine HUD
     self.defaultElements = {
-        { 
-            Name = "powerIcon", 
-            Class = GUIMarinePowerIcon, 
-            Pos = Vector(25, 46, 0), 
-            Anchor = { 
-                x = GUIItem.Left, 
-                y = GUIItem.Top 
-            } 
-        }, 
-        { 
-            Name = "commanderName", 
-            Class = GUIMarineCommanderName, 
-            Pos = Vector(30, 79, 0), 
-            Anchor = { 
-                x = GUIItem.Left, 
-                y = GUIItem.Top 
-            } 
-        },
-        { 
-            Name = "locationText", 
-            Class = GUIMarineLocationText, 
-            Pos = Vector(75, 46, 0), 
-            Anchor = { 
-                x = GUIItem.Left, 
-                y = GUIItem.Top 
-            } 
-        },
-        { 
-            Name = "armorLevelIcon", 
-            Class = GUIMarineArmorLevelIcon, 
-            Pos = Vector(-116, 40, 0), 
-            Anchor = { 
-                x = GUIItem.Right, 
-                y = GUIItem.Center 
-            } 
-        },
-        { 
-            Name = "weaponLevelIcon", 
-            Class = GUIMarineWeaponLevelIcon, 
-            Pos = Vector(-116, 148, 0), 
-            Anchor = { 
-                x = GUIItem.Right, 
-                y = GUIItem.Center 
-            } 
-        },
-        { 
-            Name = "gameTime", 
-            Class = GUIMarineGameTime, 
-            Pos = Vector(30, 109, 0), 
-            Anchor = { 
-                x = GUIItem.Left, 
-                y = GUIItem.Top 
-            } 
-        },
+        { Name = "powerIcon", Class = GUIMarinePowerIcon, Pos = Vector(25, 46, 0), Anchor = { x = GUIItem.Left, y = GUIItem.Top } }, 
+        { Name = "commanderName", Class = GUIMarineCommanderName, Pos = Vector(30, 79, 0), Anchor = { x = GUIItem.Left, y = GUIItem.Top } },
+        { Name = "locationText", Class = GUIMarineLocationText, Pos = Vector(75, 46, 0), Anchor = { x = GUIItem.Left, y = GUIItem.Top } },
+        { Name = "armorLevelIcon", Class = GUIMarineArmorLevelIcon, Pos = Vector(-116, 40, 0), Anchor = { x = GUIItem.Right, y = GUIItem.Center } },
+        { Name = "weaponLevelIcon", Class = GUIMarineWeaponLevelIcon, Pos = Vector(-116, 148, 0), Anchor = { x = GUIItem.Right, y = GUIItem.Center } },
+        { Name = "gameTime", Class = GUIMarineGameTime, Pos = Vector(30, 109, 0), Anchor = { x = GUIItem.Left, y = GUIItem.Top } },
     }
 
     -- Initialize Marine frame
