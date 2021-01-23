@@ -1,13 +1,13 @@
-Script.Load("lua/BetterUI/GUI/GUIPlayerHUD.lua")
+Script.Load("lua/BetterUI/HUD/GUIPlayerHUD.lua")
 
 -- GUI Elements
-Script.Load("lua/BetterUI/GUI/Marine/GUIMarineCommanderName.lua")
-Script.Load("lua/BetterUI/GUI/Marine/GUIMarineLocationText.lua")
-Script.Load("lua/BetterUI/GUI/Marine/GUIMarinePowerIcon.lua")
-Script.Load("lua/BetterUI/GUI/Marine/GUIMarineArmorLevelIcon.lua")
-Script.Load("lua/BetterUI/GUI/Marine/GUIMarineWeaponLevelIcon.lua")
-Script.Load("lua/BetterUI/GUI/Marine/GUIMarineGameTime.lua")
-Script.Load("lua/BetterUI/GUI/Marine/GUIMarineTeamResText.lua")
+Script.Load("lua/BetterUI/HUD/Marine/GUIMarineCommanderName.lua")
+Script.Load("lua/BetterUI/HUD/Marine/GUIMarineLocationText.lua")
+Script.Load("lua/BetterUI/HUD/Marine/GUIMarinePowerIcon.lua")
+Script.Load("lua/BetterUI/HUD/Marine/GUIMarineArmorLevelIcon.lua")
+Script.Load("lua/BetterUI/HUD/Marine/GUIMarineWeaponLevelIcon.lua")
+Script.Load("lua/BetterUI/HUD/Marine/GUIMarineGameTime.lua")
+Script.Load("lua/BetterUI/HUD/Marine/GUIMarineTeamResText.lua")
 
 class 'GUIMarineHUD' (GUIPlayerHUD)
 

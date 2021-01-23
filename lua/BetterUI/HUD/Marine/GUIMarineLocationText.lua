@@ -1,4 +1,4 @@
-Script.Load("lua/BetterUI/GUI/GUIPlayerHUDElement.lua")
+Script.Load("lua/BetterUI/HUD/GUIPlayerHUDElement.lua")
 
 class 'GUIMarineLocationText' (GUIPlayerHUDElement)
 

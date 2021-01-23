@@ -16,7 +16,7 @@
 --     return elements
 -- end
 
-Script.Load("lua/BetterUI/GUI/GUIPlayerHUD.lua")
+Script.Load("lua/BetterUI/HUD/GUIPlayerHUD.lua")
 
 -- GUI Elements
 -- Script.Load("lua/BetterUI/GUI/Alien/GUIAlienCommanderName.lua")
