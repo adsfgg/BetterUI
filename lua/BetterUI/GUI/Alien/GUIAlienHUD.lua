@@ -19,14 +19,14 @@
 Script.Load("lua/BetterUI/GUI/GUIPlayerHUD.lua")
 
 -- GUI Elements
--- Script.Load("lua/BetterUI/GUI/Marine/GUIMarineCommanderName.lua")
+-- Script.Load("lua/BetterUI/GUI/Alien/GUIAlienCommanderName.lua")
 
 class 'GUIAlienHUD' (GUIPlayerHUD)
 
 function GUIAlienHUD:Initialize()
     GUIPlayerHUD.Initialize(self)
 
-    -- Setup the default Marine HUD
+    -- Setup the default Alien HUD
     self.defaultElements = {
     }
 

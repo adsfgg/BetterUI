@@ -7,6 +7,7 @@ Script.Load("lua/BetterUI/GUI/Marine/GUIMarinePowerIcon.lua")
 Script.Load("lua/BetterUI/GUI/Marine/GUIMarineArmorLevelIcon.lua")
 Script.Load("lua/BetterUI/GUI/Marine/GUIMarineWeaponLevelIcon.lua")
 Script.Load("lua/BetterUI/GUI/Marine/GUIMarineGameTime.lua")
+Script.Load("lua/BetterUI/GUI/Marine/GUIMarineTeamResText.lua")
 
 class 'GUIMarineHUD' (GUIPlayerHUD)
 
@@ -22,7 +23,7 @@ function GUIMarineHUD:Initialize()
 
     -- Setup the default Marine HUD
     self.defaultElements = {
-        { Name = "powerIcon", Class = GUIMarinePowerIcon, Pos = Vector(25, 46, 0), Anchor = { x = GUIItem.Left, y = GUIItem.Top } }, 
+        { Name = "powerIcon", Class = GUIMarinePowerIcon, Pos = Vector(25, 46, 0), Anchor = { x = GUIItem.Left, y = GUIItem.Top } },
         { Name = "commanderName", Class = GUIMarineCommanderName, Pos = Vector(30, 79, 0), Anchor = { x = GUIItem.Left, y = GUIItem.Top } },
         { Name = "locationText", Class = GUIMarineLocationText, Pos = Vector(75, 46, 0), Anchor = { x = GUIItem.Left, y = GUIItem.Top } },
         { Name = "armorLevelIcon", Class = GUIMarineArmorLevelIcon, Pos = Vector(-116, 40, 0), Anchor = { x = GUIItem.Right, y = GUIItem.Center } },
