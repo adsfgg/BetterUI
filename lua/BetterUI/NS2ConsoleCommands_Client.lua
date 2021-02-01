@@ -3,8 +3,7 @@ Event.Hook("Console_customhud", function()
         print("HUD already being customized")
     end
 
-    local player = Client.GetLocalPlayer()
-    if player and player.GetTeamNumber and (player:GetTeamNumber() == kTeam1Index or player:GetTeamNumber() == kTeam2Index) then
+    if PlayerUI_GetCanTeamCustomiseHud() then
         print("Attempting to customize hud")
         GetGUIManager():CreateGUIScript("GUICustomizeHUD") 
     else

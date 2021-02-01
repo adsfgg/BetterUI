@@ -2,23 +2,14 @@ Script.Load("lua/GUIAnimatedScript.lua")
 
 class 'GUICustomizeHUD' (GUIAnimatedScript)
 
-local hudScripts = {
-    [kTeam1Index] = "Hud/Marine/GUIMarineHUD",
-    [kTeam2Index] = "GUIAlienHUD"
-}
-local hudScript
-
 function GUICustomizeHUD:Initialize()
     GUIAnimatedScript.Initialize(self)
     PlayerUI_SetBetterUIEnabled()
     MouseTracker_SetIsVisible(true, "ui/Cursor_MenuDefault.dds", true)
 
-    local player = Client.GetLocalPlayer()
-    if player and player.GetTeamNumber then
-        hudScript = ClientUI.GetScript(hudScripts[player:GetTeamNumber()])
-    end
-    if not hudScript.addEleCount then
-        hudScript.addEleCount = 0
+    self.hudScript = PlayerUI_GetHudScript()
+    if not self.hudScript.addEleCount then
+        self.hudScript.addEleCount = 0
     end
 end
 
@@ -40,20 +31,19 @@ function GUICustomizeHUD:Update(deltaTime)
     local mouseX, mouseY = Client.GetCursorPosScreen()
     local screenWidth = Client.GetScreenWidth()
     local screenHeight = Client.GetScreenHeight()
-    local uiElementsToMove = hudScript:GetElementsToMove()
+    local uiElementsToMove = self.hudScript:GetElementsToMove()
 
     -- Process clicks
     if self.mouseDown then
         if self.hoverElement and self.hoverElement.StartPos then
-            local scale = ConditionalValue(self.hoverElement.NoScale, 1, self.scale)
-            ProcessMove(self.hoverElement, mouseX, mouseY, scale)
+            ProcessMove(self.hoverElement, mouseX, mouseY, self.scale)
         end
     else
         -- Process hover
         self.hoverElement = nil
         for _, element in ipairs(uiElementsToMove) do
             local pos = element.Element:GetScreenPosition(screenWidth, screenHeight)
-            local size = element.Element:GetSize()
+            local size = element.Element:GetSize() * self.scale
             if size.x == 1 and size.y == 1 then
                 print("WARNING: GetSize() == (1,1) for " .. element.Name)
             end
@@ -85,12 +75,12 @@ function GUICustomizeHUD:SendKeyEvent(key, down)
         if self.rightMouseDown ~= down and down then
             local x, y = Client.GetCursorPosScreen()
             if self.hoverElement then
-                hudScript:RemoveElement(self.hoverElement.Name)
+                self.hudScript:RemoveElement(self.hoverElement.Name)
             else
                 local ele = GUIMarineTeamResText()
-                ele:Initialize( hudScript, hudScript.background, Vector(x / self.scale, y / self.scale, 0) )
-                hudScript:AddElement( "element" .. hudScript.addEleCount, ele)
-                hudScript.addEleCount = hudScript.addEleCount + 1
+                ele:Initialize( self.hudScript, self.hudScript.background, Vector(x / self.scale, y / self.scale, 0) )
+                self.hudScript:AddElement( "element" .. self.hudScript.addEleCount, ele)
+                self.hudScript.addEleCount = self.hudScript.addEleCount + 1
             end
         end
         self.rightMouseDown = down

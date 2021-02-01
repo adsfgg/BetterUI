@@ -1,6 +1,6 @@
 local oldSendKeyEvent = GUIScoreboard.SendKeyEvent
 function GUIScoreboard:SendKeyEvent(key, down)
-    local val = oldSendKeyEvent(self, key, down)
+    local consumed = oldSendKeyEvent(self, key, down)
 
     if GetIsBinding(key, "Scoreboard") then
         if self.visible then
@@ -9,5 +9,5 @@ function GUIScoreboard:SendKeyEvent(key, down)
         end
     end
 
-    return val
+    return consumed
 end

@@ -97,7 +97,7 @@ local kShowAsClass = { }
 kShowAsClass["Marine"] = 
 { 
     ["Hud/Marine/GUIMarineHUD"] = true, 
-    GUIPoisonedFeedback = true, 
+    -- GUIPoisonedFeedback = true, -- Now in GUIMarineHUD
     GUIPickups = true,
     GUISensorBlips = true,
     GUIObjectiveDisplay = true,

@@ -1,5 +1,9 @@
 local betterUIEnabled = false
 local betterUIPercentSpoof = 0.65
+local teamAllowed = {
+    [kTeam1Index] = true,
+    [kTeam2Index] = true
+}
 local hudScripts = {
     [kTeam1Index] = "Hud/Marine/GUIMarineHUD",
     [kTeam2Index] = "GUIAlienHUD"
@@ -40,6 +44,28 @@ end
 
 function PlayerUI_GetBetterUISpoofPercentage()
     return betterUIPercentSpoof
+end
+
+function PlayerUI_ResetHUDToDefault()
+    PlayerUI_GetHudScript():ResetToDefault()
+end
+
+function PlayerUI_GetHudScript()
+    local player = Client.GetLocalPlayer()
+    if player and player.GetTeamNumber then
+        return ClientUI.GetScript(hudScripts[player:GetTeamNumber()])
+    end
+
+    return nil
+end
+
+function PlayerUI_GetCanTeamCustomiseHud()
+    local player = Client.GetLocalPlayer()
+    if player and player.GetTeamNumber then
+        return teamAllowed[player:GetTeamNumber()] or false
+    end
+
+    return false
 end
 
 -- We want to spoof some values when BetterUI modification is enabled

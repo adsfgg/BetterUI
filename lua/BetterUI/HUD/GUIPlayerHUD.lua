@@ -97,6 +97,11 @@ function GUIPlayerHUD:LoadDefaultHUD()
     end
 end
 
+function GUIPlayerHUD:ResetToDefault()
+    self:Uninitialize()
+    self:Initialize()
+end
+
 function GUIPlayerHUD:CreateBackground()
     self.background = self:CreateAnimatedGraphicItem()
     self.background:SetPosition( Vector( 0, 0, 0 ) )
@@ -109,3 +114,11 @@ end
 function GUIPlayerHUD:UpdateBackgroundScale()
     self.background:SetSize( Vector( Client.GetScreenWidth(), Client.GetScreenHeight(), 0 ) )
 end
+
+function SafePlayerHUDRefreshVisibility()
+    local hudScript = PlayerUI_GetHudScript()
+    if hudScript then
+        hudScript:UpdateVisibility()
+    end
+end
+
