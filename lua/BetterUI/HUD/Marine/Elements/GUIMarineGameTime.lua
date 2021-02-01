@@ -4,13 +4,13 @@ class 'GUIMarineGameTime' (GUIPlayerHUDElement)
 
 GUIMarineGameTime.kFontName = Fonts.kAgencyFB_Small
 
-function GUIMarineGameTime:Initialize(parentScript, frame, pos, anchor)
-    GUIPlayerHUDElement.Initialize(self, parentScript, frame, pos)
+function GUIMarineGameTime:Initialize(parentScript, frame, params)
+    GUIPlayerHUDElement.Initialize(self, parentScript, frame, params)
 
     self.gameTime = self.parentScript:CreateAnimatedTextItem()
     self.gameTime:SetFontName(GUIMarineGameTime.kFontName)
     self.gameTime:SetFontIsBold(true)
-    if anchor then self.gameTime:SetAnchor(anchor.x, anchor.y) end
+    self.gameTime:SetAnchor(self.anchor.x, self.anchor.y)
     self.gameTime:SetLayer(kGUILayerPlayerHUDForeground2)
     self.gameTime:SetColor(kBrightColor)
     self.frame:AddChild(self.gameTime)
@@ -18,8 +18,8 @@ function GUIMarineGameTime:Initialize(parentScript, frame, pos, anchor)
 end
 
 function GUIMarineGameTime:Reset(scale)
-    self.gameTime:SetUniformScale(scale)
-    self.gameTime:SetScale(GetScaledVector())
+    self.gameTime:SetUniformScale(scale * self.elementScale)
+    self.gameTime:SetScale(GetScaledVector() * self.elementScale)
     self.gameTime:SetPosition(self.position)
     self.gameTime:SetFontName(GUIMarineGameTime.kFontName)
     GUIMakeFontScale(self.gameTime)
@@ -32,4 +32,8 @@ end
 
 function GUIMarineGameTime:GetElementToMove()
     return self.gameTime
+end
+
+function GUIMarineGameTime:GetClassName()
+    return "GUIMarineGameTime"
 end

@@ -5,12 +5,12 @@ class 'GUIMarineCommanderName' (GUIPlayerHUDElement)
 GUIMarineCommanderName.kFontName = Fonts.kAgencyFB_Small
 GUIMarineCommanderName.kActiveCommanderColor = Color( 246/255, 254/255, 37/255 )
 
-function GUIMarineCommanderName:Initialize(parentScript, frame, pos, anchor)
-    GUIPlayerHUDElement.Initialize(self, parentScript, frame, pos)
+function GUIMarineCommanderName:Initialize(parentScript, frame, params)
+    GUIPlayerHUDElement.Initialize(self, parentScript, frame, params)
 
     self.commanderName = self.parentScript:CreateAnimatedTextItem()
     self.commanderName:SetFontName(GUIMarineCommanderName.kFontName)
-    if anchor then self.commanderName:SetAnchor(anchor.x, anchor.y) end
+    self.commanderName:SetAnchor(self.anchor.x, self.anchor.y)
     self.commanderName:SetLayer(kGUILayerPlayerHUDForeground1)
     self.commanderName:SetColor( Color( 1, 1, 1, 1 ) )
     self.commanderName:SetFontIsBold(true)
@@ -22,9 +22,9 @@ function GUIMarineCommanderName:Initialize(parentScript, frame, pos, anchor)
 end
 
 function GUIMarineCommanderName:Reset(scale)
-    self.commanderName:SetUniformScale(scale)
-    self.commanderName:SetScale(GetScaledVector())
-    self.commanderName:SetPosition( self.position )
+    self.commanderName:SetUniformScale(scale * self.elementScale)
+    self.commanderName:SetScale(GetScaledVector() * self.elementScale)
+    self.commanderName:SetPosition(self.position)
     self.commanderName:SetFontName(GUIMarineCommanderName.kFontName)
     GUIMakeFontScale(self.commanderName)
     self.commanderName:SetIsVisible(true)
@@ -63,4 +63,8 @@ end
 
 function GUIMarineCommanderName:GetElementToMove()
     return self.commanderName
+end
+
+function GUIMarineCommanderName:GetClassName()
+    return "GUIMarineCommanderName"
 end

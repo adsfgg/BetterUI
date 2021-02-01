@@ -105,10 +105,10 @@ local function CreateBetterUIMenu()
     local headingEntries = {
         marine = {
             CreateCheckboxOption {
-                name = "betterui_marineLines",
-                label = "Marine HUD Lines",
+                name = "betterui_hudLines",
+                label = "HUD Lines",
                 default = true,
-                tooltip = "Controls the visibility of the Marine HUD lines",
+                tooltip = "Controls the visibility of the HUD lines",
                 immediateUpdate = function(self, value)
                     if Client and Client.BetterUI_SetMarineLines then
                         Client.BetterUI_SetMarineLines(value)

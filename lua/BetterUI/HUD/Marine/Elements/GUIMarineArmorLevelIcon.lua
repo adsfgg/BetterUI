@@ -11,12 +11,12 @@ local kArmorTechId = {
     kTechId.Armor3
 }
 
-function GUIMarineArmorLevelIcon:Initialize(parentScript, frame, pos, anchor)
-    GUIPlayerHUDElement.Initialize(self, parentScript, frame, pos)
+function GUIMarineArmorLevelIcon:Initialize(parentScript, frame, params)
+    GUIPlayerHUDElement.Initialize(self, parentScript, frame, params)
 
     self.armorLevel = self.parentScript:CreateAnimatedGraphicItem()
     self.armorLevel:SetTexture(GUIMarineArmorLevelIcon.kUpgradesTexture)
-    if anchor then self.armorLevel:SetAnchor(anchor.x, anchor.y) end
+    self.armorLevel:SetAnchor(self.anchor.x, self.anchor.y)
     self.frame:AddChild(self.armorLevel)
     self:Reset(parentScript.scale)
 
@@ -24,7 +24,7 @@ function GUIMarineArmorLevelIcon:Initialize(parentScript, frame, pos, anchor)
 end
 
 function GUIMarineArmorLevelIcon:Reset(scale)
-    self.armorLevel:SetUniformScale(scale)
+    self.armorLevel:SetUniformScale(scale * self.elementScale)
     self.armorLevel:SetPosition(self.position)
     self.armorLevel:SetSize(GUIMarineArmorLevelIcon.kUpgradeSize)
     self.armorLevel:SetIsVisible(false)
@@ -56,4 +56,8 @@ end
 
 function GUIMarineArmorLevelIcon:GetElementToMove()
     return self.armorLevel
+end
+
+function GUIMarineArmorLevelIcon:GetClassName()
+    return "GUIMarineArmorLevelIcon"
 end

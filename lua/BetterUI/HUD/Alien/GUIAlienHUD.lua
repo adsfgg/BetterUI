@@ -38,3 +38,6 @@ function GUIAlienHUD:Reset()
     GUIPlayerHUD.Reset(self)
 end
 
+function GUIAlienHUD:GetConfigFileLocation()
+    return "config://BetterUI/alien.json"
+end

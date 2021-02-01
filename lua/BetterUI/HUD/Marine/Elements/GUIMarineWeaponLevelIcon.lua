@@ -11,12 +11,12 @@ local kWeaponTechId = {
     kTechId.Weapons3
 }
 
-function GUIMarineWeaponLevelIcon:Initialize(parentScript, frame, pos, anchor)
-    GUIPlayerHUDElement.Initialize(self, parentScript, frame, pos)
+function GUIMarineWeaponLevelIcon:Initialize(parentScript, frame, params)
+    GUIPlayerHUDElement.Initialize(self, parentScript, frame, params)
 
     self.weaponLevel = self.parentScript:CreateAnimatedGraphicItem()
     self.weaponLevel:SetTexture(GUIMarineWeaponLevelIcon.kUpgradesTexture)
-    if anchor then self.weaponLevel:SetAnchor(anchor.x, anchor.y) end
+    self.weaponLevel:SetAnchor(self.anchor.x, self.anchor.y)
     self.frame:AddChild(self.weaponLevel)
     self:Reset(parentScript.scale)
 
@@ -24,7 +24,7 @@ function GUIMarineWeaponLevelIcon:Initialize(parentScript, frame, pos, anchor)
 end
 
 function GUIMarineWeaponLevelIcon:Reset(scale)
-    self.weaponLevel:SetUniformScale(scale)
+    self.weaponLevel:SetUniformScale(scale * self.elementScale)
     self.weaponLevel:SetPosition(self.position)
     self.weaponLevel:SetSize(GUIMarineWeaponLevelIcon.kUpgradeSize)
     self.weaponLevel:SetIsVisible(false)
@@ -56,4 +56,8 @@ end
 
 function GUIMarineWeaponLevelIcon:GetElementToMove()
     return self.weaponLevel
+end
+
+function GUIMarineWeaponLevelIcon:GetClassName()
+    return "GUIMarineWeaponLevelIcon"
 end

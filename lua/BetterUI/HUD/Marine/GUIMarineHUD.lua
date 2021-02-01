@@ -9,6 +9,7 @@ Script.Load("lua/BetterUI/HUD/Marine/Elements/GUIMarineWeaponLevelIcon.lua")
 Script.Load("lua/BetterUI/HUD/Marine/Elements/GUIMarineGameTime.lua")
 Script.Load("lua/BetterUI/HUD/Marine/Elements/GUIMarineTeamResText.lua")
 Script.Load("lua/BetterUI/HUD/Marine/Elements/GUIMarineMinimap.lua")
+Script.Load("lua/BetterUI/HUD/Marine/Elements/GUIMarineAmmoCounter.lua")
 
 class 'GUIMarineHUD' (GUIPlayerHUD)
 
@@ -37,13 +38,14 @@ function GUIMarineHUD:Initialize()
 
     -- Setup the default Marine HUD
     self.defaultElements = {
-        { Name = "powerIcon", Class = GUIMarinePowerIcon, Pos = Vector(25, 46, 0), Anchor = { x = GUIItem.Left, y = GUIItem.Top } },
-        { Name = "commanderName", Class = GUIMarineCommanderName, Pos = Vector(30, 332, 0), Anchor = { x = GUIItem.Left, y = GUIItem.Top } },
-        { Name = "minimap", Class = GUIMarineMinimap, Pos = Vector(30, 80, 0), Anchor = { x = GUIItem.Left, y = GUIItem.Top } },
-        { Name = "locationText", Class = GUIMarineLocationText, Pos = Vector(75, 46, 0), Anchor = { x = GUIItem.Left, y = GUIItem.Top } },
-        { Name = "armorLevelIcon", Class = GUIMarineArmorLevelIcon, Pos = Vector(-116, 40, 0), Anchor = { x = GUIItem.Right, y = GUIItem.Center } },
-        { Name = "weaponLevelIcon", Class = GUIMarineWeaponLevelIcon, Pos = Vector(-116, 148, 0), Anchor = { x = GUIItem.Right, y = GUIItem.Center } },
-        { Name = "gameTime", Class = GUIMarineGameTime, Pos = Vector(30, 359, 0), Anchor = { x = GUIItem.Left, y = GUIItem.Top } },
+        { Class = "GUIMarinePowerIcon", Params = { Position = { x = 25, y = 46 }, Anchor = { x = GUIItem.Left, y = GUIItem.Top } } },
+        { Class = "GUIMarineCommanderName", Params = { Position = { x = 30, y = 332 }, Anchor = { x = GUIItem.Left, y = GUIItem.Top } } },
+        { Class = "GUIMarineMinimap", Params = { Position = { x = 30, y = 80 }, Anchor = { x = GUIItem.Left, y = GUIItem.Top } } },
+        { Class = "GUIMarineLocationText", Params = { Position = { x = 75, y = 46 }, Anchor = { x = GUIItem.Left, y = GUIItem.Top } } },
+        { Class = "GUIMarineArmorLevelIcon", Params = { Position = { x = -116, y = 40 }, Anchor = { x = GUIItem.Right, y = GUIItem.Center } } },
+        { Class = "GUIMarineWeaponLevelIcon", Params = { Position = { x = -116, y = 148 }, Anchor = { x = GUIItem.Right, y = GUIItem.Center } } },
+        { Class = "GUIMarineGameTime", Params = { Position = { x = 30, y = 359 }, Anchor = { x = GUIItem.Left, y = GUIItem.Top } } },
+        { Class = "GUIMarineAmmoCounter", Params = { Position = { x = -210, y = -115 }, Anchor = { x = GUIItem.Right, y = GUIItem.Bottom } } },
     }
 
     -- Initialize Marine frame
@@ -148,7 +150,7 @@ function GUIMarineHUD:ResetPoisonFrame()
 end
 
 function GUIMarineHUD:GetIsAnimatingPoisonEffect()
-    return self.poisonBottomLeft:GetIsAnimating()
+    return self.poisonBottomLeft:GetIsAnimating() and not (Client and Client.BetterUI_GetMarinePoison and Client.BetterUI_GetMarinePoison())
 end
 
 function GUIMarineHUD:TriggerPoisonEffect()
@@ -158,4 +160,8 @@ function GUIMarineHUD:TriggerPoisonEffect()
 
     self.poisonBottomLeft:FadeIn(GUIMarineHUD.kRegenPulseDuration, "ANIM_REGEN_VEIN", AnimateSin, PulseOut)
     self.poisonBottomRight:FadeIn(GUIMarineHUD.kRegenPulseDuration, "ANIM_REGEN_VEIN", AnimateSin, PulseOut)
+end
+
+function GUIMarineHUD:GetConfigFileLocation()
+    return "config://BetterUI/marine.json"
 end

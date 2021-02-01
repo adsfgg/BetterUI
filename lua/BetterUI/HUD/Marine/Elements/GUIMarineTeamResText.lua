@@ -4,12 +4,12 @@ class 'GUIMarineTeamResText' (GUIPlayerHUDElement)
 
 GUIMarineTeamResText.kFontName = Fonts.kAgencyFB_Small
 
-function GUIMarineTeamResText:Initialize(parentScript, frame, pos, anchor)
-    GUIPlayerHUDElement.Initialize(self, parentScript, frame, pos)
+function GUIMarineTeamResText:Initialize(parentScript, frame, params)
+    GUIPlayerHUDElement.Initialize(self, parentScript, frame, params)
 
     self.teamResText = self.parentScript:CreateAnimatedTextItem()
     self.teamResText:SetFontName(GUIMarineTeamResText.kFontName)
-    if anchor then self.teamResText:SetAnchor(anchor.x, anchor.y) end
+    self.teamResText:SetAnchor(self.anchor.x, self.anchor.y)
     self.teamResText:SetLayer(kGUILayerPlayerHUDForeground2)
     self.teamResText:SetColor(kBrightColor)
     self.teamResText:SetFontIsBold(true)
@@ -19,8 +19,8 @@ function GUIMarineTeamResText:Initialize(parentScript, frame, pos, anchor)
 end
 
 function GUIMarineTeamResText:Reset(scale)
-    self.teamResText:SetUniformScale(scale)
-    self.teamResText:SetScale(GetScaledVector())
+    self.teamResText:SetUniformScale(scale * self.elementScale)
+    self.teamResText:SetScale(GetScaledVector() * self.elementScale)
     self.teamResText:SetPosition(self.position)
     self.teamResText:SetFontName(GUIMarineTeamResText.kFontName)
     GUIMakeFontScale(self.teamResText)
@@ -33,4 +33,8 @@ end
 
 function GUIMarineTeamResText:GetElementToMove()
     return self.teamResText
+end
+
+function GUIMarineTeamResText:GetClassName()
+    return "GUIMarineTeamResText"
 end

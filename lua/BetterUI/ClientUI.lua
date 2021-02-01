@@ -104,7 +104,7 @@ kShowAsClass["Marine"] =
     GUIProgressBar = true,
     GUIRequestMenu = true,
     GUIWaypoints = true,
-    GUIClassicAmmo = true
+    -- GUIClassicAmmo = true
 }
 
 kShowAsClass["JetpackMarine"] =

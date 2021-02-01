@@ -18,15 +18,15 @@ local powerColours = {
     Color(30/255, 150/255, 151/255, 0.8), -- DAMAGED
 }
 
-function GUIMarinePowerIcon:Initialize(parentScript, frame, pos, anchor)
-    GUIPlayerHUDElement.Initialize(self, parentScript, frame, pos)
+function GUIMarinePowerIcon:Initialize(parentScript, frame, params)
+    GUIPlayerHUDElement.Initialize(self, parentScript, frame, params)
 
     self.powerIcon = self.parentScript:CreateAnimatedGraphicItem()
     self.powerIcon:SetTexture(GUIMarinePowerIcon.kMinimapBorderTexture)
     self.powerIcon:SetTexturePixelCoordinates(GUIUnpackCoords(GUIMarinePowerIcon.kPowerIconTextureCoords))
     self.powerIcon:SetLayer(kGUILayerPlayerHUDForeground2)
     self.powerIcon:SetColor( Color(1,1,1,0.5) )
-    if anchor then self.powerIcon:SetAnchor(anchor.x, anchor.y) end
+    self.powerIcon:SetAnchor(self.anchor.x, self.anchor.y)
     self.powerIcon:SetBlendTechnique(GUIItem.Add)
     self.frame:AddChild(self.powerIcon)
     self:Reset(parentScript.scale)
@@ -35,7 +35,7 @@ function GUIMarinePowerIcon:Initialize(parentScript, frame, pos, anchor)
 end
 
 function GUIMarinePowerIcon:Reset(scale)
-    self.powerIcon:SetUniformScale(scale)
+    self.powerIcon:SetUniformScale(scale * self.elementScale)
     self.powerIcon:SetSize(GUIMarinePowerIcon.kPowerIconSize)
     self.powerIcon:SetPosition(self.position)
     self.powerIcon:SetIsVisible(true)
@@ -75,4 +75,8 @@ end
 
 function GUIMarinePowerIcon:GetElementToMove()
     return self.powerIcon
+end
+
+function GUIMarinePowerIcon:GetClassName()
+    return "GUIMarinePowerIcon"
 end

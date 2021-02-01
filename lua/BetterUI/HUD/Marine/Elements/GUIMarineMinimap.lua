@@ -17,13 +17,13 @@ GUIMarineMinimap.kMinimapScanStartPos = Vector(0, - 128, 0)
 GUIMarineMinimap.kMinimapScanEndPos = Vector(0, GUIMarineMinimap.kMinimapBackgroundSize.y + 512, 0)
 
 
-function GUIMarineMinimap:Initialize(parentScript, frame, pos, anchor)
-    GUIPlayerHUDElement.Initialize(self, parentScript, frame, pos)
+function GUIMarineMinimap:Initialize(parentScript, frame, params)
+    GUIPlayerHUDElement.Initialize(self, parentScript, frame, params)
     
     self.minimapBackground = self.parentScript:CreateAnimatedGraphicItem()
     self.minimapBackground:SetTexture(GUIMarineMinimap.kMinimapBorderTexture)
     self.minimapBackground:SetTexturePixelCoordinates(GUIUnpackCoords(GUIMarineMinimap.kMinimapScanTextureCoords))
-    if anchor then self.minimapBackground:SetAnchor(anchor.x, anchor.y) end
+    self.minimapBackground:SetAnchor(self.anchor.x, self.anchor.y)
     self.minimapBackground:SetColor( Color( 1, 1, 1, 1 ) )
     self.minimapBackground:SetLayer(kGUILayerPlayerHUDForeground1)
     self.frame:AddChild(self.minimapBackground)
@@ -100,7 +100,7 @@ function GUIMarineMinimap:RefreshMinimapZoom()
 end
 
 function GUIMarineMinimap:Reset(scale)
-    self.minimapBackground:SetUniformScale(scale)
+    self.minimapBackground:SetUniformScale(scale * self.elementScale)
     self.minimapBackground:SetSize(GUIMarineMinimap.kMinimapBackgroundSize)
     self.minimapBackground:SetPosition(self.position)
     self.minimapBackground:SetColor( Color( 1, 1, 1, 1 ) )
@@ -108,7 +108,7 @@ function GUIMarineMinimap:Reset(scale)
     self.minimapStencil:SetSize(scale * GUIMarineMinimap.kStencilSize)
     self.minimapStencil:SetPosition( scale * (-GUIMarineMinimap.kStencilSize/2 + GUIMarineMinimap.kStencilPos) )
 
-    self.minimapScanLines:SetUniformScale(scale)
+    self.minimapScanLines:SetUniformScale(scale * self.elementScale)
     self.minimapScanLines:SetSize(GUIMarineMinimap.kMinimapBackgroundSize)
     
     self.minimapFrame:SetPosition(Vector(-190, -180, 0) * scale)
@@ -128,4 +128,8 @@ end
 
 function GUIMarineMinimap:GetElementToMove()
     return self.minimapBackground
+end
+
+function GUIMarineMinimap:GetClassName()
+    return "GUIMarineMinimap"
 end
