@@ -81,7 +81,7 @@ function GUICustomizeHUD:SendKeyEvent(key, down)
 
     if key == InputKey.Escape and not down then
         -- Save the HUD when we exit
-        SafePlayerHUDSaveHUD()
+        self.hudScript:SaveHUD()
 
         -- Destroy this GUI script
         GetGUIManager():DestroyGUIScript(self)
