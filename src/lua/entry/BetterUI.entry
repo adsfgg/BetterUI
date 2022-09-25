@@ -1,0 +1,5 @@
+modEntry = {
+    Client = "lua/BetterUI_Client.lua",
+    FileHooks = "lua/BetterUI_FileHooks.lua",
+    Priority = 50
+}
