@@ -9,7 +9,7 @@
 -- ========= For more information, visit us at http://www.unknownworlds.com =====================
 
 -- DEBUG
-Script.Load("lua/Hud2/topBar/GUIHudTopBar.lua")
+--Script.Load("lua/Hud2/topBar/GUIHudTopBar.lua")
 
 ClientUI = { }
 
@@ -33,20 +33,18 @@ kShowOnTeam["all"] =
     GUIChat = true,
     GUIVoiceChat = true,
     GUIMinimapFrame = true,
-    --GUIMapAnnotations = true,
     GUICommunicationStatusIcons = true,
     GUIUnitStatus = true,
-    GUIDeathScreen = true,
+    GUIDeathScreen2 = true,
     GUIStartVoteMenu = true,
     GUIVoteMenu = true,
-    GUIIssuesDisplay = true,
+    ["Hud2/thunderdome/GUIReadyRoomDelayTimer"] = Shared.GetThunderdomeEnabled(),
 }
 
 kShowOnTeam[kTeamReadyRoom] =
 {
-    GUIReadyRoomOrders = true,
+    GUIReadyRoomOrders = not Shared.GetThunderdomeEnabled(),
     GUIRequestMenu = true,
-    --GUIGameFeedback = true,
 }
 
 kShowOnTeam[kTeam1Index] =
@@ -77,7 +75,7 @@ local kBothAlienAndMarine =
     GUIWaitingForAutoTeamBalance = true, 
     GUITechMap = true, 
     GUITipVideo = false,
-    -- ["Hud2/topBar/GUIHudTopBarForLocalTeam"] = true,
+    ["Hud2/topBar/GUIHudTopBarForLocalTeam"] = true,
 }
 
 for n, e in pairs(kBothAlienAndMarine) do
@@ -97,13 +95,15 @@ local kShowAsClass = { }
 kShowAsClass["Marine"] = 
 { 
     ["Hud/Marine/GUIMarineHUD"] = true, 
-    -- GUIPoisonedFeedback = true, -- Now in GUIMarineHUD
+    -- Implemented in BetterUI
+    -- GUIPoisonedFeedback = true, 
     GUIPickups = true,
     GUISensorBlips = true,
     GUIObjectiveDisplay = true,
     GUIProgressBar = true,
     GUIRequestMenu = true,
     GUIWaypoints = true,
+    -- Implemented in BetterUI
     -- GUIClassicAmmo = true
 }
 
@@ -212,7 +212,6 @@ local kMiscPreloads = {
     'GUIMinimapButtons',
     'GUIParticleSystem',
     'GUIProduction',
-    --'GUIResourceDisplay',
     'GUIScript',
     'GUISelectionPanel',
     'GUISkulkParasiteHelp',
@@ -222,7 +221,6 @@ local kMiscPreloads = {
     'Hud/Commander/GhostModel',
     'Hud/Commander/TeleportAlienGhostModel',
     'menu/GUIHoverTooltip',
-    'menu/PlayScreen',
     'tweener/Tweener',
     'GUICommanderButtonsMarines',
     'GUICommanderButtons',
