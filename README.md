@@ -1,2 +1,2 @@
 # BetterUI
-Attempts to fix a lot of the long standing issues with the UI in NS2
+A UI overhaul mod for Natural Selection 2
