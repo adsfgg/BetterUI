@@ -122,6 +122,12 @@ function GUIPlayerHUD:ResetToDefault()
     self:Reset()
 end
 
+function GUIPlayerHUD:ClearHUD()
+    self:ClearElements()
+    self:SaveHUD()
+    self:Reset()
+end
+
 function GUIPlayerHUD:CreateBackground()
     self.background = self:CreateAnimatedGraphicItem()
     self.background:SetPosition( Vector( 0, 0, 0 ) )

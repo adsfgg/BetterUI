@@ -100,6 +100,27 @@ local function ResetPopup()
     })
 end
 
+local function ClearPopup()
+    CreateGUIObject("popup", GUIMenuPopupSimpleMessage, nil, {
+        title = "Clear HUD Layout",
+        message = "Clear all HUD elements?",
+        buttonConfig = {
+            -- Confirm
+            {
+                name = "betterUI_confirmClear",
+                params = { label = "YES, CLEAR" },
+                callback = function(popup)
+                    popup:Close()
+                    PlayerUI_ClearHUD()
+                end
+            },
+
+            -- Cancel
+            GUIPopupDialog.CancelButton
+        }
+    })
+end
+
 local function CreateBetterUIMenu()
     -- Data for each heading group
     local headingEntries = {
@@ -169,6 +190,20 @@ local function CreateBetterUIMenu()
         postInit = {
             function (self)
                 self:HookEvent(self, "OnPressed", ResetPopup)
+            end
+        }
+    })
+
+    -- Add clear hud button
+    table.insert(menu, {
+        name = "BetterUIClearHud",
+        class = GUIMenuButton,
+        properties = {
+            { "Label", "Clear HUD" }
+        },
+        postInit = {
+            function (self)
+                self:HookEvent(self, "OnPressed", ClearPopup)
             end
         }
     })

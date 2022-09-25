@@ -50,6 +50,10 @@ function PlayerUI_ResetHUDToDefault()
     PlayerUI_GetHudScript():ResetToDefault()
 end
 
+function PlayerUI_ClearHUD()
+    PlayerUI_GetHudScript():ClearHUD()
+end
+
 function PlayerUI_GetHudScript()
     local player = Client.GetLocalPlayer()
     if player and player.GetTeamNumber then
