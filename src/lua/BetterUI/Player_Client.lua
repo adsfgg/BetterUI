@@ -72,6 +72,25 @@ function PlayerUI_GetCanTeamCustomiseHud()
     return false
 end
 
+function Player:OnUpdateRender()
+
+    PROFILE("Player:OnUpdateRender")
+
+    if self:GetIsLocalPlayer() then
+
+        local stunned = HasMixin(self, "Stun") and self:GetIsStunned()
+        local blurEnabled = self.buyMenu ~= nil or stunned or (self.viewingHelpScreen == true) or (self.customizingHud == true)
+        self:SetBlurEnabled(blurEnabled)
+
+        self.lastOnUpdateRenderTime = self.lastOnUpdateRenderTime or Shared.GetTime()
+        local now = Shared.GetTime()
+        self:UpdateScreenEffects(now - self.lastOnUpdateRenderTime)
+        self.lastOnUpdateRenderTime = now
+
+    end
+
+end
+
 -- We want to spoof some values when BetterUI modification is enabled
 
 function PlayerUI_GetPlayerHealth()
