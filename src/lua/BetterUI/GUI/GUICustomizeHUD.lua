@@ -7,23 +7,25 @@ function GUICustomizeHUD:Initialize()
     PlayerUI_SetBetterUIEnabled()
     MouseTracker_SetIsVisible(true, "ui/Cursor_MenuDefault.dds", true)
 
-    -- Tell the Player_Client that we're customizing (displays blur)
+    -- Tell the Player_Client that we're customising (displays blur)
     local player = Client.GetLocalPlayer()
     assert(player)
-    player.customizingHud = true
+    player.customisingHud = true
 
     self.hudScript = PlayerUI_GetHudScript()
+    self.hudScript:OnStartCustomisingHud()
 end
 
 function GUICustomizeHUD:Uninitialize()
+    self.hudScript:OnStopCustomisingHud()
     GUIAnimatedScript.Uninitialize(self)
     PlayerUI_SetBetterUIDisabled()
     MouseTracker_SetIsVisible(false)
 
-    -- Tell the Player_Client that we're no longer customizing (hides blur)
+    -- Tell the Player_Client that we're no longer customising (hides blur)
     local player = Client.GetLocalPlayer()
     assert(player)
-    player.customizingHud = false
+    player.customisingHud = false
 end
 
 local function ProcessMove(ele, mouseX, mouseY, scale)

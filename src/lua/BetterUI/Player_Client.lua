@@ -79,7 +79,7 @@ function Player:OnUpdateRender()
     if self:GetIsLocalPlayer() then
 
         local stunned = HasMixin(self, "Stun") and self:GetIsStunned()
-        local blurEnabled = self.buyMenu ~= nil or stunned or (self.viewingHelpScreen == true) or (self.customizingHud == true)
+        local blurEnabled = self.buyMenu ~= nil or stunned or (self.viewingHelpScreen == true) or (self.customisingHud == true)
         self:SetBlurEnabled(blurEnabled)
 
         self.lastOnUpdateRenderTime = self.lastOnUpdateRenderTime or Shared.GetTime()

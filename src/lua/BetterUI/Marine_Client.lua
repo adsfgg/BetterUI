@@ -47,7 +47,7 @@ function Marine:UpdateClientEffects(deltaTime, isLocal)
         end
         
         local stunned = HasMixin(self, "Stun") and self:GetIsStunned()
-        local blurEnabled = self.buyMenu ~= nil or stunned or (self.viewingHelpScreen == true) or (self.customizingHud == true)
+        local blurEnabled = self.buyMenu ~= nil or stunned or (self.viewingHelpScreen == true) or (self.customisingHud == true)
         self:SetBlurEnabled(blurEnabled)
         
         -- update spit hit effect
