@@ -78,6 +78,25 @@ function GUIMarineHUD:UpdateVisibility()
     self.poisonBottomRight:SetIsVisible(poisonState)
 end
 
+function GUIMarineHUD:SetIsVisible(isVisible)
+    GUIPlayerHUD.SetIsVisible(self, isVisible)
+    
+    self.topLeftFrame:SetIsVisible(isVisible)
+    self.topRightFrame:SetIsVisible(isVisible)
+    self.bottomLeftFrame:SetIsVisible(isVisible)
+    self.bottomRightFrame:SetIsVisible(isVisible)
+
+    local frameState = Client.BetterUI_GetMarineLines() or isVisible
+    self.topLeftFrame:SetIsVisible(frameState)
+    self.topRightFrame:SetIsVisible(frameState)
+    self.bottomLeftFrame:SetIsVisible(frameState)
+    self.bottomRightFrame:SetIsVisible(frameState)
+
+    local poisonState = Client.BetterUI_GetMarinePoison() or isVisible
+    self.poisonBottomLeft:SetIsVisible(poisonState)
+    self.poisonBottomRight:SetIsVisible(poisonState)
+end
+
 function GUIMarineHUD:InitFrame()
     self.topLeftFrame = GetGUIManager():CreateGraphicItem()
     self.topLeftFrame:SetTexture(GUIMarineHUD.kFrameTexture)

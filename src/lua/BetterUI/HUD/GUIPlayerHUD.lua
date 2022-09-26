@@ -13,6 +13,8 @@ function GUIPlayerHUD:Initialize()
 
     -- Initialize background
     self:CreateBackground()
+
+    self.visible = true
 end
 
 function GUIPlayerHUD:Uninitialize()
@@ -37,6 +39,16 @@ function GUIPlayerHUD:Update(deltaTime)
     for _,element in ipairs(self.hudElements) do
         element:Update(deltaTime)
     end
+end
+
+function GUIPlayerHUD:GetIsVisible()
+    return self.visible
+end
+
+function GUIPlayerHUD:SetIsVisible(isVisible)
+    self.visible = isVisible
+
+    self.background:SetIsVisible(isVisible)
 end
 
 function GUIPlayerHUD:GetElements()
