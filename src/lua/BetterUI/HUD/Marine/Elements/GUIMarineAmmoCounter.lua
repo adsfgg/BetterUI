@@ -9,22 +9,23 @@ function GUIMarineAmmoCounter:Initialize(parentScript, frame, params)
     GUIPlayerHUDElement.Initialize(self, parentScript, frame, params)
 
     self.ammoText = self.parentScript:CreateAnimatedTextItem()
-    self.ammoText:SetAnchor(self.anchor.x, self.anchor.y)
-    self.ammoText:SetTextAlignmentX(GUIItem.Align_Min)
-    self.ammoText:SetTextAlignmentY(GUIItem.Align_Center)
-    self.ammoText:SetColor(GUIMarineAmmoCounter.kAmmoColor)
     self.ammoText:SetFontName(GUIMarineAmmoCounter.kFontName)
-    self.ammoText:SetIsVisible(true)
+    self.ammoText:SetAnchor(self.anchor.x, self.anchor.y)
+    self.ammoText:SetLayer(kGUILayerPlayerHUDForeground2)
+    self.ammoText:SetColor(GUIMarineAmmoCounter.kAmmoColor)
+
+    self.frame:AddChild(self.ammoText)
 
     self:Reset(self.parentScript.scale)
 end
 
 function GUIMarineAmmoCounter:Reset(scale)
-    self.ammoText:SetPosition(self.position)
-    self.ammoText:SetFontName(GUIMarineAmmoCounter.kFontName)
     self.ammoText:SetUniformScale(scale * self.elementScale)
     self.ammoText:SetScale(GetScaledVector() * self.elementScale)
+    self.ammoText:SetPosition(self.position)
+    self.ammoText:SetFontName(GUIMarineAmmoCounter.kFontName)
     GUIMakeFontScale(self.ammoText)
+    self.ammoText:SetIsVisible(true)
 end
 
 local pulsateTime = 0
