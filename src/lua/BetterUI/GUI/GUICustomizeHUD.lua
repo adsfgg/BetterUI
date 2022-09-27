@@ -2,6 +2,14 @@ Script.Load("lua/GUIAnimatedScript.lua")
 
 class 'GUICustomizeHUD' (GUIAnimatedScript)
 
+local function CreateOutlineBox()
+    local box = GetGUIManager():CreateLinesItem()
+    box:SetScale(GetScaledVector())
+    box:SetIsVisible(false)
+
+    return box
+end
+
 function GUICustomizeHUD:Initialize()
     GUIAnimatedScript.Initialize(self)
     PlayerUI_SetBetterUIEnabled()
@@ -13,11 +21,28 @@ function GUICustomizeHUD:Initialize()
     player.customisingHud = true
 
     self.hudScript = PlayerUI_GetHudScript()
-    self.hudScript:OnStartCustomisingHud()
+
+    self.background = self:CreateAnimatedGraphicItem()
+    self.background:SetPosition( Vector( 0, 0, 0 ) )
+    self.background:SetIsScaling(false)
+    self.background:SetIsVisible(true)
+    self.background:SetLayer(kGUILayerPlayerHUDBackground)
+    self.background:SetColor( Color( 1, 1, 1, 0 ) )
+    
+    self.outlineBoxes = {}
+    for i = 1,#self.hudScript:GetElementsToMove() do
+        self.outlineBoxes[i] = CreateOutlineBox()
+        self.background:AddChild(self.outlineBoxes[i])
+    end
+end
+
+function GUICustomizeHUD:AddOutlineBox()
+    local i = #self.outlineBoxes + 1
+    self.outlineBoxes[i] = CreateOutlineBox()
+    self.background:AddChild(self.outlineBoxes[i])
 end
 
 function GUICustomizeHUD:Uninitialize()
-    self.hudScript:OnStopCustomisingHud()
     GUIAnimatedScript.Uninitialize(self)
     PlayerUI_SetBetterUIDisabled()
     MouseTracker_SetIsVisible(false)
@@ -60,6 +85,32 @@ function GUICustomizeHUD:Update(deltaTime)
             end
         end
     end
+
+    -- Outlines
+    for _,box in ipairs(self.outlineBoxes) do
+        box:SetIsVisible(false)
+    end
+
+    local outlineColor = Color(1, 0, 0, 1)
+    local screenWidth = Client.GetScreenWidth()
+    local screenHeight = Client.GetScreenHeight()
+
+    for i, ele in ipairs(uiElementsToMove) do
+        local pos = ele:GetScreenPosition(screenWidth, screenHeight)
+        local size = ele:GetSize() * self.scale
+    
+        local topLeft = Vector(pos.x, pos.y, 0)
+        local topRight = Vector(pos.x + size.x, pos.y, 0)
+        local bottomLeft = Vector(pos.x, pos.y + size.y, 0)
+        local bottomRight = Vector(pos.x + size.x, pos.y + size.y, 0)
+    
+        self.outlineBoxes[i]:SetIsVisible(true)
+        self.outlineBoxes[i]:ClearLines()
+        self.outlineBoxes[i]:AddLine(topLeft, topRight, outlineColor)
+        self.outlineBoxes[i]:AddLine(bottomLeft, bottomRight, outlineColor)
+        self.outlineBoxes[i]:AddLine(topLeft, bottomLeft, outlineColor)
+        self.outlineBoxes[i]:AddLine(topRight, bottomRight, outlineColor)
+    end
 end
 
 function GUICustomizeHUD:SendKeyEvent(key, down)
@@ -86,6 +137,7 @@ function GUICustomizeHUD:SendKeyEvent(key, down)
                 local ele = GUIMarineTeamResText()
                 ele:Initialize( self.hudScript, self.hudScript.background, { Position = { x = x / self.scale, y = y / self.scale } } )
                 self.hudScript:AddElement(ele)
+                self:AddOutlineBox()
             end
         end
         self.rightMouseDown = down
