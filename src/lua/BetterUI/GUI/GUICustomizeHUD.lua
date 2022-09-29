@@ -100,8 +100,48 @@ function GUICustomizeHUD:ProcessMove(mouseX, mouseY)
     local newPos = Vector(currPos.x + deltaX, currPos.y + deltaY, 0)
     ele.Element:SetPosition(newPos)
 
+    if self.snap then
+        self:SnapToNearest(ele.Element)
+    end
+
     ele.LastMouseX = mouseX
     ele.LastMouseY = mouseY
+end
+
+function GUICustomizeHUD:SnapToNearest(ele)
+    local snapThreshold = 2
+
+    local screenWidth = Client.GetScreenWidth()
+    local screenHeight = Client.GetScreenHeight()
+    local ourPos = ele:GetScreenPosition(screenWidth, screenHeight)
+    local ourSize = ele:GetSize() * self.scale
+
+    -- Try and snap to window edges
+    if ourPos.x < snapThreshold then
+        ele:SetPosition(Vector(0, ourPos.y, 0))
+        return
+    end
+
+    if screenWidth - (ourPos.x + ourSize.x) < snapThreshold then
+        ele:SetPosition(Vector(screenWidth - ourSize.x, ourPos.y, 0))
+        return
+    end
+
+    if ourPos.y < snapThreshold then
+        ele:SetPosition(Vector(ourPos.x, 0, 0))
+        return
+    end
+
+    if screenHeight - (ourPos.y + ourSize.y) < snapThreshold then
+        ele:SetPosition(Vector(ourPos.x, screenHeight - ourSize.y, 0))
+        return
+    end
+
+    -- Look for objects to snap to
+    -- for i, target in ipairs(uiElementsToMove) do
+    --     local targetPos = target:GetScreenPosition(screenWidth, screenHeight)
+    --     local targetSize = target:GetSize() * self.scale
+    -- end
 end
 
 function GUICustomizeHUD:Update(deltaTime)
