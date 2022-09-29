@@ -109,7 +109,7 @@ function GUICustomizeHUD:ProcessMove(mouseX, mouseY)
 end
 
 function GUICustomizeHUD:SnapToNearest(ele)
-    local snapThreshold = 2
+    local snapThreshold = 20 * self.scale
 
     local screenWidth = Client.GetScreenWidth()
     local screenHeight = Client.GetScreenHeight()
