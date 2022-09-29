@@ -28,6 +28,23 @@ function GUICustomizeHUD:Initialize()
     self.background:SetIsVisible(true)
     self.background:SetLayer(kGUILayerPlayerHUDBackground)
     self.background:SetColor( Color( 1, 1, 1, 0 ) )
+
+    -- Add alignment lines
+    local screenWidth = Client.GetScreenWidth()
+    local screenHeight = Client.GetScreenHeight()
+    local alignmentLineColor = Color(0.8, 0.8, 0.8, 0.5)
+    local topCenter = Vector(screenWidth / 2, 0, 0)
+    local bottomCenter = Vector(screenWidth / 2, screenHeight, 0)
+    local leftCenter = Vector(0, screenHeight / 2, 0)
+    local rightCenter = Vector(screenWidth, screenHeight / 2, 0)
+
+    local alignmentLines = GetGUIManager():CreateLinesItem()
+    alignmentLines:SetScale(GetScaledVector())
+    alignmentLines:SetIsVisible(true)
+    alignmentLines:ClearLines()
+    alignmentLines:AddLine(topCenter, bottomCenter, alignmentLineColor)
+    alignmentLines:AddLine(leftCenter, rightCenter, alignmentLineColor)
+    self.background:AddChild(alignmentLines)
     
     self.outlineBoxes = {}
     for i = 1,#self.hudScript:GetElementsToMove() do
