@@ -1,0 +1,17 @@
+Shared UI Elements:
+* Kill feed
+* Banner text
+* Top bar
+* "New Info!" text
+
+Marine UI Elements not in GUIMarineHUD:
+* Jetpack fuel
+* Exo?
+
+Alien UI Elements not in GUIAlienHUD:
+* Upgrades
+* Hives
+* Boneshield Energyw
+* "Evolution available" popup 
+
+* Add crosshair customiser (long term goal)
