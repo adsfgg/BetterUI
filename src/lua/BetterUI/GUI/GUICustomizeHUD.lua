@@ -53,12 +53,38 @@ function GUICustomizeHUD:Uninitialize()
     player.customisingHud = false
 end
 
-local function ProcessMove(ele, mouseX, mouseY, scale)
-    local pos = ele.Element:GetPosition()
-    local deltaX = (mouseX - ele.StartMouseX) / scale
-    local deltaY = (mouseY - ele.StartMouseY) / scale
-    local newPos = Vector(ele.StartPos.x + deltaX, ele.StartPos.y + deltaY, 0)
+function GUICustomizeHUD:ProcessMove(mouseX, mouseY)
+    local ele = self.hoverElement
+    local currPos = ele.Element:GetPosition()
+    local deltaX = (mouseX - ele.LastMouseX) / self.scale
+    local deltaY = (mouseY - ele.LastMouseY) / self.scale
+
+    if self.lockAxis then
+        -- If we haven't decided on an axis to lock, decide now
+        if not self.lockAxisX and not self.lockAxisY then
+            local absDeltaX = math.abs(deltaX)
+            local absDeltaY = math.abs(deltaY)
+            -- Lock the axis we move the least in
+            if absDeltaX > absDeltaY then
+                self.lockAxisY = true
+            elseif absDeltaY > absDeltaX then
+                self.lockAxisX = true
+            end
+        end
+
+        -- Eliminate our deltas based on our locked axis
+        if self.lockAxisX then
+            deltaX = 0
+        elseif self.lockAxisY then
+            deltaY = 0
+        end
+    end
+
+    local newPos = Vector(currPos.x + deltaX, currPos.y + deltaY, 0)
     ele.Element:SetPosition(newPos)
+
+    ele.LastMouseX = mouseX
+    ele.LastMouseY = mouseY
 end
 
 function GUICustomizeHUD:Update(deltaTime)
@@ -69,8 +95,8 @@ function GUICustomizeHUD:Update(deltaTime)
 
     -- Process clicks
     if self.mouseDown then
-        if self.hoverElement and self.hoverElement.StartPos then
-            ProcessMove(self.hoverElement, mouseX, mouseY, self.scale)
+        if self.hoverElement and self.hoverElement.LastMouseX and self.hoverElement.LastMouseY then
+            self:ProcessMove(mouseX, mouseY)
         end
     else
         -- Process hover
@@ -118,10 +144,11 @@ function GUICustomizeHUD:SendKeyEvent(key, down)
     if key == InputKey.MouseButton0 and self.hoverElement then
         if self.mouseDown ~= down then
             if down then
-                self.hoverElement.StartMouseX, self.hoverElement.StartMouseY = Client.GetCursorPosScreen()
-                self.hoverElement.StartPos = self.hoverElement.Element:GetPosition()
+                self.hoverElement.LastMouseX, self.hoverElement.LastMouseY = Client.GetCursorPosScreen()
+                self.lockAxisY = false
+                self.lockAxisX = false
             else
-                self.hoverElement.StartMouseX, self.hoverElement.StartMouseY, self.hoverElement.StartPos = 0, 0, nil
+                self.hoverElement.LastMouseX, self.hoverElement.LastMouseY = 0, 0
             end
         end
         self.mouseDown = down
@@ -141,6 +168,18 @@ function GUICustomizeHUD:SendKeyEvent(key, down)
             end
         end
         self.rightMouseDown = down
+    end
+
+    -- Handle axis locking
+    if key == InputKey.LeftShift or key == InputKey.RightShift then
+        self.lockAxis = down
+        self.lockAxisY = false
+        self.lockAxisX = false
+    end
+
+    -- Handle snapping
+    if key == InputKey.LeftAlt or key == InputKey.RightAlt then
+        self.snap = down
     end
 
     if key == InputKey.Escape and not down then
