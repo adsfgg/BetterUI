@@ -183,6 +183,10 @@ function GUICustomizeHUD:SnapToNearest(ele, uiElementsToMove)
 
     -- Look for objects to snap to
     for i, target in ipairs(uiElementsToMove) do
+        if target == ele then
+            goto continue
+        end
+
         local targetPos = target:GetPosition()
         local targetScreenPos = target:GetScreenPosition(screenWidth, screenHeight)
         local targetSize = target:GetSize() * self.scale
@@ -221,6 +225,8 @@ function GUICustomizeHUD:SnapToNearest(ele, uiElementsToMove)
             ourPos = ele:GetPosition()
             ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
         end
+
+        ::continue::
     end
 end
 
