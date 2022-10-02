@@ -70,7 +70,7 @@ function GUICustomizeHUD:Uninitialize()
     player.customisingHud = false
 end
 
-function GUICustomizeHUD:ProcessMove(mouseX, mouseY)
+function GUICustomizeHUD:ProcessMove(mouseX, mouseY, uiElementsToMove)
     local ele = self.hoverElement
     local currPos = ele.Element:GetPosition()
     local deltaX = (mouseX - ele.LastMouseX) / self.scale
@@ -101,14 +101,14 @@ function GUICustomizeHUD:ProcessMove(mouseX, mouseY)
     ele.Element:SetPosition(newPos)
 
     if self.snap then
-        self:SnapToNearest(ele.Element)
+        self:SnapToNearest(ele.Element, uiElementsToMove)
     end
 
     ele.LastMouseX = mouseX
     ele.LastMouseY = mouseY
 end
 
-function GUICustomizeHUD:SnapToNearest(ele)
+function GUICustomizeHUD:SnapToNearest(ele, uiElementsToMove)
     local snapThreshold = 20 * self.scale
 
     local screenWidth = Client.GetScreenWidth()
@@ -182,10 +182,46 @@ function GUICustomizeHUD:SnapToNearest(ele)
     end
 
     -- Look for objects to snap to
-    -- for i, target in ipairs(uiElementsToMove) do
-    --     local targetPos = target:GetScreenPosition(screenWidth, screenHeight)
-    --     local targetSize = target:GetSize() * self.scale
-    -- end
+    for i, target in ipairs(uiElementsToMove) do
+        local targetPos = target:GetPosition()
+        local targetScreenPos = target:GetScreenPosition(screenWidth, screenHeight)
+        local targetSize = target:GetSize() * self.scale
+
+        local withinBoundsX = ourScreenPos.x + ourSize.x >= targetScreenPos.x and ourScreenPos.x <= targetScreenPos.x + targetSize.x
+        local withinBoundsY = ourScreenPos.y + ourSize.y >= targetScreenPos.y and ourScreenPos.y <= targetScreenPos.y + targetSize.y
+
+        if math.abs(ourScreenPos.x + ourSize.x - targetScreenPos.x) < snapThreshold and withinBoundsY then
+            ele:SetAnchor(GUIItem.Top, GUIItem.Left)
+            local newPos = ele.guiItem:GetParent():ScreenSpaceToLocalSpace(Vector(targetScreenPos.x - ourSize.x, ourScreenPos.y, 0)) / self.scale
+            ele:SetPosition(newPos)
+            ourPos = ele:GetPosition()
+            ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
+        end
+        
+        if math.abs(ourScreenPos.x - targetScreenPos.x - targetSize.x) < snapThreshold and withinBoundsY then
+            ele:SetAnchor(GUIItem.Top, GUIItem.Left)
+            local newPos = ele.guiItem:GetParent():ScreenSpaceToLocalSpace(Vector(targetScreenPos.x + targetSize.x, ourScreenPos.y, 0)) / self.scale
+            ele:SetPosition(newPos)
+            ourPos = ele:GetPosition()
+            ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
+        end
+
+        if math.abs(ourScreenPos.y + ourSize.y - targetScreenPos.y) < snapThreshold and withinBoundsX then
+            ele:SetAnchor(GUIItem.Top, GUIItem.Left)
+            local newPos = ele.guiItem:GetParent():ScreenSpaceToLocalSpace(Vector(ourScreenPos.x, targetScreenPos.y - ourSize.y, 0)) / self.scale
+            ele:SetPosition(newPos)
+            ourPos = ele:GetPosition()
+            ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
+        end
+
+        if math.abs(ourScreenPos.y - targetScreenPos.y - targetSize.y) < snapThreshold and withinBoundsX then
+            ele:SetAnchor(GUIItem.Top, GUIItem.Left)
+            local newPos = ele.guiItem:GetParent():ScreenSpaceToLocalSpace(Vector(ourScreenPos.x, targetScreenPos.y + targetSize.y, 0)) / self.scale
+            ele:SetPosition(newPos)
+            ourPos = ele:GetPosition()
+            ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
+        end
+    end
 end
 
 function GUICustomizeHUD:Update(deltaTime)
@@ -197,7 +233,7 @@ function GUICustomizeHUD:Update(deltaTime)
     -- Process clicks
     if self.mouseDown then
         if self.hoverElement and self.hoverElement.LastMouseX and self.hoverElement.LastMouseY then
-            self:ProcessMove(mouseX, mouseY)
+            self:ProcessMove(mouseX, mouseY, uiElementsToMove)
         end
     else
         -- Process hover
