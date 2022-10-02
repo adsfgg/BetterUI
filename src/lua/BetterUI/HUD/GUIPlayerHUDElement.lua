@@ -23,6 +23,7 @@ local function CreatePositionVector(tbl)
         return Vector(tbl.x, tbl.y, 0)
     end
 
+    print("Using default position")
     return Vector(0, 0, 0)
 end
 
@@ -34,6 +35,7 @@ local function CreateAnchorTable(tbl)
         }
     end
 
+    print("Using default anchor")
     return { x = GUIItem.Top, y = GUIItem.Left }
 end
 
