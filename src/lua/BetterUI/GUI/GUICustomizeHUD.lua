@@ -121,26 +121,30 @@ function GUICustomizeHUD:SnapToNearest(ele)
     -- Try and snap to window edges
     if ourScreenPos.x < snapThreshold then
         ele:SetPosition(Vector(snapOffset, ourPos.y, 0))
-        return true
+        ourPos = ele:GetPosition()
+        ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
     end
 
     if screenWidth - (ourScreenPos.x + ourSize.x) < snapThreshold then
         ele:SetAnchor(GUIItem.Top, GUIItem.Left)
         local newPos = ele.guiItem:GetParent():ScreenSpaceToLocalSpace(Vector(screenWidth - ourSize.x - snapOffset, ourScreenPos.y, 0)) / self.scale
         ele:SetPosition(newPos)
-        return true
+        ourPos = ele:GetPosition()
+        ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
     end
 
     if ourScreenPos.y < snapThreshold then
         ele:SetPosition(Vector(ourPos.x, snapOffset, 0))
-        return true
+        ourPos = ele:GetPosition()
+        ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
     end
 
     if screenHeight - (ourScreenPos.y + ourSize.y) < snapThreshold then
         ele:SetAnchor(GUIItem.Top, GUIItem.Left)
         local newPos = ele.guiItem:GetParent():ScreenSpaceToLocalSpace(Vector(ourScreenPos.x, screenHeight - ourSize.y - snapOffset, 0)) / self.scale
         ele:SetPosition(newPos)
-        return true
+        ourPos = ele:GetPosition()
+        ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
     end
 
     -- Look for objects to snap to
