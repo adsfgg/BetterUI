@@ -120,6 +120,7 @@ function GUICustomizeHUD:SnapToNearest(ele)
 
     -- Try and snap to window edges
     if ourScreenPos.x < snapThreshold then
+        ele:SetAnchor(GUIItem.Top, GUIItem.Left)
         ele:SetPosition(Vector(snapOffset, ourPos.y, 0))
         ourPos = ele:GetPosition()
         ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
@@ -134,6 +135,7 @@ function GUICustomizeHUD:SnapToNearest(ele)
     end
 
     if ourScreenPos.y < snapThreshold then
+        ele:SetAnchor(GUIItem.Top, GUIItem.Left)
         ele:SetPosition(Vector(ourPos.x, snapOffset, 0))
         ourPos = ele:GetPosition()
         ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
@@ -142,6 +144,39 @@ function GUICustomizeHUD:SnapToNearest(ele)
     if screenHeight - (ourScreenPos.y + ourSize.y) < snapThreshold then
         ele:SetAnchor(GUIItem.Top, GUIItem.Left)
         local newPos = ele.guiItem:GetParent():ScreenSpaceToLocalSpace(Vector(ourScreenPos.x, screenHeight - ourSize.y - snapOffset, 0)) / self.scale
+        ele:SetPosition(newPos)
+        ourPos = ele:GetPosition()
+        ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
+    end
+
+    -- Try and snap to centre lines
+    if math.abs(ourScreenPos.x - (screenWidth / 2)) < snapThreshold then
+        ele:SetAnchor(GUIItem.Top, GUIItem.Left)
+        local newPos = ele.guiItem:GetParent():ScreenSpaceToLocalSpace(Vector(screenWidth / 2, ourScreenPos.y, 0)) / self.scale
+        ele:SetPosition(newPos)
+        ourPos = ele:GetPosition()
+        ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
+    end
+
+    if math.abs(ourScreenPos.x + ourSize.x - (screenWidth / 2)) < snapThreshold then
+        ele:SetAnchor(GUIItem.Top, GUIItem.Left)
+        local newPos = ele.guiItem:GetParent():ScreenSpaceToLocalSpace(Vector((screenWidth / 2) - ourSize.x, ourScreenPos.y, 0)) / self.scale
+        ele:SetPosition(newPos)
+        ourPos = ele:GetPosition()
+        ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
+    end
+
+    if math.abs(ourScreenPos.y - (screenHeight / 2)) < snapThreshold then
+        ele:SetAnchor(GUIItem.Top, GUIItem.Left)
+        local newPos = ele.guiItem:GetParent():ScreenSpaceToLocalSpace(Vector(ourScreenPos.x, screenHeight / 2, 0)) / self.scale
+        ele:SetPosition(newPos)
+        ourPos = ele:GetPosition()
+        ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
+    end
+
+    if math.abs(ourScreenPos.y + ourSize.y - (screenHeight / 2)) < snapThreshold then
+        ele:SetAnchor(GUIItem.Top, GUIItem.Left)
+        local newPos = ele.guiItem:GetParent():ScreenSpaceToLocalSpace(Vector(ourScreenPos.x, (screenHeight / 2) - ourSize.y, 0)) / self.scale
         ele:SetPosition(newPos)
         ourPos = ele:GetPosition()
         ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
