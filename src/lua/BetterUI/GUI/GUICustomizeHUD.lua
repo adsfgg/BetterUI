@@ -109,8 +109,7 @@ function GUICustomizeHUD:ProcessMove(mouseX, mouseY)
 end
 
 function GUICustomizeHUD:SnapToNearest(ele)
-    local snapOffset = 2
-    local snapThreshold = snapOffset + 20 * self.scale
+    local snapThreshold = 20 * self.scale
 
     local screenWidth = Client.GetScreenWidth()
     local screenHeight = Client.GetScreenHeight()
@@ -121,14 +120,14 @@ function GUICustomizeHUD:SnapToNearest(ele)
     -- Try and snap to window edges
     if ourScreenPos.x < snapThreshold then
         ele:SetAnchor(GUIItem.Top, GUIItem.Left)
-        ele:SetPosition(Vector(snapOffset, ourPos.y, 0))
+        ele:SetPosition(Vector(1, ourPos.y, 0))
         ourPos = ele:GetPosition()
         ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
     end
 
     if screenWidth - (ourScreenPos.x + ourSize.x) < snapThreshold then
         ele:SetAnchor(GUIItem.Top, GUIItem.Left)
-        local newPos = ele.guiItem:GetParent():ScreenSpaceToLocalSpace(Vector(screenWidth - ourSize.x - snapOffset, ourScreenPos.y, 0)) / self.scale
+        local newPos = ele.guiItem:GetParent():ScreenSpaceToLocalSpace(Vector(screenWidth - ourSize.x - 1, ourScreenPos.y, 0)) / self.scale
         ele:SetPosition(newPos)
         ourPos = ele:GetPosition()
         ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
@@ -136,14 +135,14 @@ function GUICustomizeHUD:SnapToNearest(ele)
 
     if ourScreenPos.y < snapThreshold then
         ele:SetAnchor(GUIItem.Top, GUIItem.Left)
-        ele:SetPosition(Vector(ourPos.x, snapOffset, 0))
+        ele:SetPosition(Vector(ourPos.x, 1, 0))
         ourPos = ele:GetPosition()
         ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
     end
 
     if screenHeight - (ourScreenPos.y + ourSize.y) < snapThreshold then
         ele:SetAnchor(GUIItem.Top, GUIItem.Left)
-        local newPos = ele.guiItem:GetParent():ScreenSpaceToLocalSpace(Vector(ourScreenPos.x, screenHeight - ourSize.y - snapOffset, 0)) / self.scale
+        local newPos = ele.guiItem:GetParent():ScreenSpaceToLocalSpace(Vector(ourScreenPos.x, screenHeight - ourSize.y - 1, 0)) / self.scale
         ele:SetPosition(newPos)
         ourPos = ele:GetPosition()
         ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
