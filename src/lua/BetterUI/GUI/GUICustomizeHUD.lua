@@ -109,32 +109,38 @@ function GUICustomizeHUD:ProcessMove(mouseX, mouseY)
 end
 
 function GUICustomizeHUD:SnapToNearest(ele)
-    local snapThreshold = 20 * self.scale
+    local snapOffset = 2
+    local snapThreshold = snapOffset + 20 * self.scale
 
     local screenWidth = Client.GetScreenWidth()
     local screenHeight = Client.GetScreenHeight()
-    local ourPos = ele:GetScreenPosition(screenWidth, screenHeight)
+    local ourPos = ele:GetPosition()
+    local ourScreenPos = ele:GetScreenPosition(screenWidth, screenHeight)
     local ourSize = ele:GetSize() * self.scale
 
     -- Try and snap to window edges
-    if ourPos.x < snapThreshold then
-        ele:SetPosition(Vector(0, ourPos.y, 0))
-        return
+    if ourScreenPos.x < snapThreshold then
+        ele:SetPosition(Vector(snapOffset, ourPos.y, 0))
+        return true
     end
 
-    if screenWidth - (ourPos.x + ourSize.x) < snapThreshold then
-        ele:SetPosition(Vector(screenWidth - ourSize.x, ourPos.y, 0))
-        return
+    if screenWidth - (ourScreenPos.x + ourSize.x) < snapThreshold then
+        ele:SetAnchor(GUIItem.Top, GUIItem.Left)
+        local newPos = ele.guiItem:GetParent():ScreenSpaceToLocalSpace(Vector(screenWidth - ourSize.x - snapOffset, ourScreenPos.y, 0)) / self.scale
+        ele:SetPosition(newPos)
+        return true
     end
 
-    if ourPos.y < snapThreshold then
-        ele:SetPosition(Vector(ourPos.x, 0, 0))
-        return
+    if ourScreenPos.y < snapThreshold then
+        ele:SetPosition(Vector(ourPos.x, snapOffset, 0))
+        return true
     end
 
-    if screenHeight - (ourPos.y + ourSize.y) < snapThreshold then
-        ele:SetPosition(Vector(ourPos.x, screenHeight - ourSize.y, 0))
-        return
+    if screenHeight - (ourScreenPos.y + ourSize.y) < snapThreshold then
+        ele:SetAnchor(GUIItem.Top, GUIItem.Left)
+        local newPos = ele.guiItem:GetParent():ScreenSpaceToLocalSpace(Vector(ourScreenPos.x, screenHeight - ourSize.y - snapOffset, 0)) / self.scale
+        ele:SetPosition(newPos)
+        return true
     end
 
     -- Look for objects to snap to
